@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --color-primary: 154 107 77;
+  --color-secondary: 111 78 58;
+  --color-accent: 205 165 136;
+  --color-text: 255 255 255;
+  --color-surface: 247 239 233;
+}
+
+html {
+  height: 100%;
+  background: rgb(var(--color-primary));
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  color: rgb(var(--color-text));
+  background:
+    radial-gradient(circle at top, rgb(var(--color-accent) / 0.16), transparent 30%),
+    radial-gradient(circle at 20% 20%, rgb(var(--color-secondary) / 0.22), transparent 26%),
+    linear-gradient(180deg, rgb(var(--color-primary)) 0%, rgb(var(--color-secondary)) 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgb(var(--color-accent) / 0.45);
+  color: rgb(var(--color-text));
+}
+
+.grain {
+  position: relative;
+}
+
+.grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+
+.soft-glow {
+  box-shadow: 0 0 120px rgb(var(--color-accent) / 0.22), 0 0 200px rgb(var(--color-secondary) / 0.2);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
