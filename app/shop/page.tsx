@@ -146,13 +146,13 @@ export default function ShopPage() {
               className="rounded-[2rem] border border-text/10 bg-[linear-gradient(180deg,rgb(var(--color-text)/0.05),rgb(var(--color-text)/0.02))] px-5 py-6 backdrop-blur-xl sm:px-7 sm:py-7 lg:px-10 lg:py-10"
             >
               <div className="grid gap-7 lg:grid-cols-2 lg:items-center lg:gap-10">
-                <div className={`${imageColumn} group relative overflow-hidden rounded-[1.5rem] border border-text/12 shadow-[0_20px_60px_rgba(0,0,0,0.24)]`}>
+                <div className={`${imageColumn} group relative overflow-hidden rounded-[1.5rem] border border-text/12 bg-text/6 shadow-[0_20px_60px_rgba(0,0,0,0.24)]`}>
                   <Image
                     src={product.image}
                     alt={product.imageAlt}
                     width={900}
                     height={900}
-                    className="h-[18.5rem] w-full object-cover transition duration-700 ease-out group-hover:scale-[1.05] sm:h-[22rem]"
+                    className="h-[18.5rem] w-full object-contain transition duration-700 ease-out group-hover:scale-[1.05] sm:h-[22rem]"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.25))]" />
                 </div>
@@ -262,22 +262,22 @@ export default function ShopPage() {
             transition={{ duration: 0.75 }}
             className="grid gap-5 sm:grid-cols-2"
           >
-            <div className="group overflow-hidden rounded-[1.5rem] border border-text/10 shadow-[0_15px_50px_rgba(0,0,0,0.22)]">
+            <div className="group overflow-hidden rounded-[1.5rem] border border-text/10 bg-text/6 shadow-[0_15px_50px_rgba(0,0,0,0.22)]">
               <Image
                 src="/Website_Assets/Product 2.jpeg"
                 alt="Morning wellness moment with Svarna Health"
                 width={900}
                 height={900}
-                className="h-64 w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                className="h-64 w-full object-contain transition duration-700 group-hover:scale-[1.04]"
               />
             </div>
-            <div className="group overflow-hidden rounded-[1.5rem] border border-text/10 shadow-[0_15px_50px_rgba(0,0,0,0.22)]">
+            <div className="group overflow-hidden rounded-[1.5rem] border border-text/10 bg-text/6 shadow-[0_15px_50px_rgba(0,0,0,0.22)]">
               <Image
                 src="/Website_Assets/Product 3.jpeg"
                 alt="Active lifestyle visual with Svarna Health"
                 width={900}
                 height={900}
-                className="h-64 w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                className="h-64 w-full object-contain transition duration-700 group-hover:scale-[1.04]"
               />
             </div>
           </motion.div>

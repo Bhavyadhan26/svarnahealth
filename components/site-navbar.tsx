@@ -18,19 +18,18 @@ export function SiteNavbar() {
     <header className="sticky top-0 z-50 w-full bg-[linear-gradient(180deg,rgb(var(--color-primary)/0.96),rgb(var(--color-primary)/0.86))] backdrop-blur-xl">
       <div className="flex w-full items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/#home" className="flex min-w-0 items-center gap-3 rounded-none px-0 py-1 transition" aria-label="Svarna Health home">
-          <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-text/10 bg-surface/90 shadow-[0_0_18px_rgb(var(--color-accent)/0.14)]">
+          <span className="shrink-0">
             <Image
               src="/Website_Assets/logo.jpg"
               alt="Svarna Health logo"
-              fill
-              sizes="44px"
-              className="object-cover"
+              width={88}
+              height={44}
+              className="h-11 w-auto"
               priority
             />
           </span>
           <span className="flex min-w-0 flex-col leading-none">
             <span className="font-display text-lg tracking-[0.1em] text-text/92 sm:text-xl">Svarna Health</span>
-            <span className="mt-1 text-[0.62rem] uppercase tracking-[0.28em] text-text/55">Ayurvedic functional nutrition</span>
           </span>
         </Link>
 
