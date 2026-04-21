@@ -117,51 +117,104 @@ function RailMarker({
 }
 
 function ScrollFrameDisplay({ scrollProgress }: FrameCanvasProps) {
-  const sourceList = useFrameSources();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const allFrames = useFrameSources();
+  const sourceList = useMemo(() => {
+    if (typeof navigator === 'undefined') {
+      return allFrames;
+    }
+
+    const nav = navigator as Navigator & { deviceMemory?: number };
+    const memory = nav.deviceMemory ?? 4;
+    const cores = nav.hardwareConcurrency ?? 4;
+
+    let step = 1;
+    if (cores <= 8 || memory <= 8) {
+      step = 2;
+    }
+    if (cores <= 4 || memory <= 4) {
+      step = 3;
+    }
+    if (cores <= 2 || memory <= 2) {
+      step = 4;
+    }
+
+    const reduced = allFrames.filter((_, index) => index % step === 0);
+    const lastFrame = allFrames[allFrames.length - 1];
+
+    if (reduced[reduced.length - 1] !== lastFrame) {
+      reduced.push(lastFrame);
+    }
+
+    return reduced;
+  }, [allFrames]);
   const frameRef = useRef(0);
+  const lastRenderedFrameRef = useRef(-1);
   const targetFrameRef = useRef(0);
   const rafRef = useRef<number | null>(null);
+  const preloadedRef = useRef<Set<number>>(new Set());
   const prefersReducedMotion = useReducedMotion();
   const [visibleFrameIndex, setVisibleFrameIndex] = useState(0);
   const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    let framesLoaded = 0;
+  const preloadAround = useCallback((center: number) => {
+    const start = Math.max(0, center - 4);
+    const end = Math.min(sourceList.length - 1, center + 12);
 
-    const loadImages = async () => {
-      for (let index = 0; index < sourceList.length; index += 1) {
-        if (cancelled) return;
-        const image = new Image();
-        image.onload = () => {
-          framesLoaded += 1;
-          if (framesLoaded === sourceList.length) {
-            setIsReady(true);
-          }
-        };
-        image.src = sourceList[index];
+    for (let index = start; index <= end; index += 1) {
+      if (preloadedRef.current.has(index)) {
+        continue;
+      }
+
+      preloadedRef.current.add(index);
+      const image = new Image();
+      image.decoding = 'async';
+      image.src = sourceList[index];
+    }
+  }, [sourceList]);
+
+  useEffect(() => {
+    const firstImage = new Image();
+    firstImage.decoding = 'async';
+    firstImage.onload = () => setIsReady(true);
+    firstImage.src = sourceList[0];
+
+    preloadAround(0);
+
+    return () => {
+      if (rafRef.current) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [preloadAround, sourceList]);
+
+  useMotionValueEvent(scrollProgress, 'change', (latest) => {
+    const maxFrame = sourceList.length - 1;
+    targetFrameRef.current = latest * maxFrame;
+
+    if (rafRef.current !== null) {
+      return;
+    }
+
+    const animateToTarget = () => {
+      const smoothing = prefersReducedMotion ? 0.26 : 0.18;
+      frameRef.current += (targetFrameRef.current - frameRef.current) * smoothing;
+
+      const nextFrame = Math.max(0, Math.min(maxFrame, Math.round(frameRef.current)));
+      if (nextFrame !== lastRenderedFrameRef.current) {
+        lastRenderedFrameRef.current = nextFrame;
+        setVisibleFrameIndex(nextFrame);
+        preloadAround(nextFrame);
+      }
+
+      if (Math.abs(targetFrameRef.current - frameRef.current) > 0.08) {
+        rafRef.current = window.requestAnimationFrame(animateToTarget);
+      } else {
+        rafRef.current = null;
       }
     };
 
-    loadImages();
-
-    const animate = () => {
-      const progress = scrollProgress.get();
-      const maxFrame = sourceList.length - 1;
-      targetFrameRef.current = progress * maxFrame;
-      frameRef.current += (targetFrameRef.current - frameRef.current) * (prefersReducedMotion ? 0.18 : 0.08);
-      setVisibleFrameIndex(Math.max(0, Math.min(maxFrame, Math.round(frameRef.current))));
-      rafRef.current = window.requestAnimationFrame(animate);
-    };
-
-    rafRef.current = window.requestAnimationFrame(animate);
-
-    return () => {
-      cancelled = true;
-      if (rafRef.current) window.cancelAnimationFrame(rafRef.current);
-    };
-  }, [scrollProgress, sourceList, prefersReducedMotion]);
+    rafRef.current = window.requestAnimationFrame(animateToTarget);
+  });
 
   return (
     <div className="relative h-full w-full overflow-hidden bg-primary">
@@ -524,7 +577,7 @@ export function JourneyExperience() {
 
       <section
         ref={journeyContainerRef}
-        className="min-h-[420dvh] min-h-[420svh] w-full pb-20 scroll-mt-28"
+        className="min-h-[300dvh] min-h-[300svh] w-full pb-20 scroll-mt-28"
         style={{ position: 'relative' }}
       >
         <div className="sticky top-0 flex h-[100dvh] min-h-[100svh] items-center">
