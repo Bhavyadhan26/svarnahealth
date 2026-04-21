@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const navItems = [
   { label: 'Home', href: '/#home' },
@@ -13,9 +13,42 @@ const navItems = [
 
 export function SiteNavbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const navbarRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node | null;
+      if (navbarRef.current && target && !navbarRef.current.contains(target)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('touchstart', handlePointerDown, { passive: true });
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen]);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[linear-gradient(180deg,rgb(var(--color-primary)/0.96),rgb(var(--color-primary)/0.86))] backdrop-blur-xl">
+    <header
+      ref={navbarRef}
+      className="sticky top-0 z-50 w-full bg-[linear-gradient(180deg,rgb(var(--color-primary)/0.96),rgb(var(--color-primary)/0.86))] backdrop-blur-xl"
+    >
       <div className="flex w-full items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/#home" className="flex min-w-0 items-center gap-3 rounded-none px-0 py-1 transition" aria-label="Svarna Health home">
           <span className="shrink-0">
@@ -58,15 +91,15 @@ export function SiteNavbar() {
 
       <div
         id="mobile-nav"
-        className={`${isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden border-t border-text/8 transition-all duration-300 lg:hidden`}
+        className={`${isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'} absolute left-0 right-0 top-full z-50 overflow-hidden bg-[linear-gradient(180deg,rgb(var(--color-primary)/0.97),rgb(var(--color-primary)/0.9))] shadow-[0_16px_30px_rgba(0,0,0,0.22)] transition-all duration-300 lg:hidden`}
       >
-        <div className="grid w-full gap-2 px-4 py-3 sm:px-6">
+        <div className="flex w-full flex-col items-center px-4 pb-4 text-center sm:px-6">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setIsOpen(false)}
-              className="rounded-2xl border border-text/8 bg-text/5 px-4 py-3 text-sm font-medium tracking-[0.14em] text-text/82 transition hover:bg-text/10"
+              className="py-2.5 text-center text-sm font-medium tracking-[0.14em] text-text/78 transition hover:text-text/96"
             >
               {item.label}
             </Link>

@@ -50,10 +50,10 @@ export default function AboutPage() {
   return (
     <main className="grain bg-void text-white">
       {/* Hero Section */}
-      <section className="relative flex min-h-[80dvh] w-full items-center justify-center overflow-hidden pt-24">
+      <section className="relative flex min-h-[66svh] min-h-[66dvh] w-full items-start justify-center overflow-hidden pt-12 sm:min-h-[76dvh] sm:items-center sm:pt-20">
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,rgba(205,165,136,0.3),transparent_50%)]" />
         
-        <div className="relative z-10 flex w-full max-w-6xl flex-col items-center justify-center px-6 py-16 text-center sm:px-10 lg:px-12">
+        <div className="relative z-10 flex w-full max-w-6xl flex-col items-center justify-center px-6 py-10 text-center sm:px-10 sm:py-14 lg:px-12 lg:py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

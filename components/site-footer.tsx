@@ -5,9 +5,9 @@ export function SiteFooter() {
     <footer className="w-full bg-[linear-gradient(180deg,rgb(var(--color-primary)/0.86),rgb(var(--color-primary)/0.96))] backdrop-blur-xl">
       <div className="flex w-full flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
         {/* Main footer content */}
-        <div className="grid w-full gap-6 lg:grid-cols-3">
+        <div className="grid w-full place-items-center gap-6 text-center lg:grid-cols-3 lg:place-items-stretch lg:text-left">
           {/* Left: Brand */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col items-center gap-4 lg:items-start">
             <div>
               <h3 className="font-display text-lg tracking-[0.1em] text-text/92">Svarna Health</h3>
               <p className="mt-1 text-[0.62rem] uppercase tracking-[0.28em] text-text/55">Ayurvedic functional nutrition</p>
@@ -15,17 +15,17 @@ export function SiteFooter() {
           </div>
 
           {/* Middle: Map */}
-          <div className="flex flex-col gap-3 lg:items-center lg:text-center">
+          <div className="flex flex-col items-center gap-3 lg:text-center">
             <p className="text-[0.7rem] uppercase tracking-[0.32em] text-text/45">Find Us</p>
             <p className="text-sm leading-6 text-text/75">Delhi, India</p>
           </div>
 
           {/* Right: Social links */}
-          <div className="flex flex-col gap-4 lg:items-end">
+          <div className="flex flex-col items-center gap-4 lg:items-end">
             <p className="text-[0.7rem] uppercase tracking-[0.32em] text-text/45">Connect with us</p>
             <div className="flex gap-3">
               <a
-                href="https://instagram.com/svarnahealth"
+                href="https://www.instagram.com/svarnahealth/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-full border border-text/10 bg-text/5 p-2.5 transition hover:border-text/20 hover:bg-text/10"
