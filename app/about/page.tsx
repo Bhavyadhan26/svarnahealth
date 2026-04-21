@@ -2,6 +2,9 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+const heroPhrases = ['Redefining Wellness', 'One ritual at a time'];
 
 const ingredients = [
   {
@@ -32,11 +35,11 @@ const ingredients = [
 ];
 
 const whyChooseUs = [
-  { title: '100% Natural', description: 'No synthetic ingredients, pure botanical wellness' },
-  { title: 'No Preservatives', description: 'Fresh-pressed formulations without chemical additives' },
-  { title: 'Science-backed', description: 'Rooted in Ayurvedic tradition and modern research' },
-  { title: 'Nutrient-rich', description: 'Cold-pressed to retain maximum bioavailability' },
-  { title: 'Immunity Boosting', description: 'Designed to strengthen your natural defenses' }
+  { title: 'Clean Ingredients', description: 'No colour, no preservatives, no salt/sugar added.' },
+  { title: 'Rooted In Nature', description: 'Ancient Wisdom | Modern Care in every formulation.' },
+  { title: 'Crafted For Gut, Skin, Hair', description: 'Designed as a daily wellness ritual for visible long-term results.' },
+  { title: 'Modern Lifestyle Ready', description: 'Easy to enjoy even on hectic mornings and packed schedules.' },
+  { title: 'Crafted With Care', description: 'Fresh wellness shots made with ingredient integrity at the core.' }
 ];
 
 const testimonials = [
@@ -47,27 +50,73 @@ const testimonials = [
 ];
 
 export default function AboutPage() {
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentPhrase = heroPhrases[phraseIndex];
+
+    let delay = isDeleting ? 45 : 85;
+    if (!isDeleting && displayText === currentPhrase) {
+      delay = 1300;
+    }
+    if (isDeleting && displayText.length === 0) {
+      delay = 320;
+    }
+
+    const timer = window.setTimeout(() => {
+      if (!isDeleting) {
+        if (displayText === currentPhrase) {
+          setIsDeleting(true);
+          return;
+        }
+        setDisplayText(currentPhrase.slice(0, displayText.length + 1));
+        return;
+      }
+
+      if (displayText.length === 0) {
+        setIsDeleting(false);
+        setPhraseIndex((index) => (index + 1) % heroPhrases.length);
+        return;
+      }
+
+      setDisplayText(currentPhrase.slice(0, displayText.length - 1));
+    }, delay);
+
+    return () => window.clearTimeout(timer);
+  }, [displayText, isDeleting, phraseIndex]);
+
   return (
     <main className="grain bg-void text-white">
       {/* Hero Section */}
-      <section className="relative flex min-h-[66svh] min-h-[66dvh] w-full items-start justify-center overflow-hidden pt-12 sm:min-h-[76dvh] sm:items-center sm:pt-20">
+      <section
+        className="relative flex w-full items-center justify-center overflow-visible pt-2 sm:pt-3 lg:pt-4"
+        style={{ height: 'calc(100dvh - 4.5rem)', minHeight: 'calc(100svh - 4.5rem)' }}
+      >
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,rgba(205,165,136,0.3),transparent_50%)]" />
         
-        <div className="relative z-10 flex w-full max-w-6xl flex-col items-center justify-center px-6 py-10 text-center sm:px-10 sm:py-14 lg:px-12 lg:py-16">
+        <div className="relative z-10 flex w-full max-w-6xl flex-col items-center justify-center px-6 py-4 text-center sm:px-10 sm:py-6 lg:px-12 lg:py-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="max-w-4xl"
           >
-            <p className="mb-6 text-sm uppercase tracking-[0.3em] text-gold/80">Our Story</p>
-            <h1 className="font-display text-5xl leading-tight text-text/95 sm:text-6xl md:text-7xl lg:text-8xl">
-              Redefining Wellness, One Ritual at a Time
+            <p className="mb-4 text-xs uppercase tracking-[0.3em] text-gold/80 sm:mb-5 sm:text-sm">Our Story</p>
+            <h1
+              className="font-display text-[clamp(2.45rem,8.5vw,7rem)] leading-[1.03] text-text/95"
+              aria-label="Redefining Wellness, One ritual at a time"
+            >
+              <span className="inline-flex min-h-[1.15em] items-baseline">
+                <span>{displayText}</span>
+                <span aria-hidden="true" className="about-type-cursor" />
+              </span>
             </h1>
-            <p className="mx-auto mt-8 max-w-2xl text-sm leading-7 text-text/70 sm:text-base md:text-lg">
-              Svarna Health blends the wisdom of ancient Ayurveda with modern convenience to create premium functional nutrition that fits seamlessly into your everyday ritual.
+            <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-text/70 sm:mt-6 sm:text-base sm:leading-7 md:text-lg">
+              Svarna blends the wisdom of ancient Ayurveda with modern convenience. SIP THE GOLD. Small daily habits. Big long term results.
             </p>
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-8 sm:flex-row">
               <Link
                 href="#explore"
                 className="group inline-flex items-center justify-center rounded-full border border-text/12 bg-text/6 px-6 py-3 text-sm font-semibold tracking-[0.22em] text-text/90 backdrop-blur-md transition-colors hover:border-gold/30 hover:bg-gold/10"
@@ -133,7 +182,7 @@ export default function AboutPage() {
                 <div>
                   <h3 className="font-semibold text-text/90">Our Commitment</h3>
                   <p className="mt-2 text-sm leading-7 text-text/70">
-                    Every bottle embodies purity, efficacy, and luxury. We source the finest ingredients, craft with cold-press precision, and deliver wellness that looks as good as it feels.
+                    Every bottle embodies purity and consistency. 500ml lasts for 15 days, making daily wellness simple, practical, and easy to sustain.
                   </p>
                 </div>
               </div>
@@ -272,26 +321,24 @@ export default function AboutPage() {
             className="mb-12 text-center"
           >
             <p className="text-[0.72rem] uppercase tracking-[0.42em] text-text/35">The Ritual</p>
-            <h2 className="mt-4 font-display text-4xl leading-tight text-text/92 sm:text-5xl">
-              Daily Wellness Rituals
-            </h2>
+            <h2 className="mt-4 font-display text-4xl leading-tight text-text/92 sm:text-5xl">3 Wellness Goals</h2>
           </motion.div>
 
           <div className="grid gap-8 lg:grid-cols-3">
             {[
               {
-                title: 'Morning Activation',
-                body: 'Start your day with clarity and energy. A ritualistic sip of Svarna Health awakens your immunity and sets intention for the day ahead.',
+                title: 'Better Digestion',
+                body: 'A consistent morning shot ritual supports gut comfort and helps you feel lighter through the day.',
                 icon: '🌅'
               },
               {
-                title: 'Midday Momentum',
-                body: 'Combat the afternoon slump with natural nourishment. Keep vitality high and focus sharp through your most productive hours.',
+                title: 'Healthy Glowing Skin',
+                body: 'Nutrient-dense ingredients support inner nourishment for a naturally radiant everyday glow.',
                 icon: '⚡'
               },
               {
-                title: 'Evening Serenity',
-                body: 'Wind down with a calming ritual. Svarna Health supports your body\'s natural restoration and prepares you for restorative sleep.',
+                title: 'Stronger Hair',
+                body: 'Botanical micronutrients and consistency-first routines help support stronger, healthier-looking hair.',
                 icon: '🌙'
               }
             ].map((lifestyle, index) => (

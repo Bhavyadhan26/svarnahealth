@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { frameSources, philosophyCards, stageCopy } from '@/lib/frame-sources';
 
 const ingredientTokens = ['Amla', 'Turmeric', 'Saffron', 'Herbs'];
+const homeHeroPhrase = 'SIP THE GOLD';
 
 type FrameCanvasProps = {
   scrollProgress: ReturnType<typeof useScroll>['scrollYProgress'];
@@ -540,7 +541,8 @@ function PhilosophySection() {
 export function JourneyExperience() {
   const journeyContainerRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress: pageProgress } = useScroll();
-  const heroFrames = useFrameSources();
+  const [heroDisplayText, setHeroDisplayText] = useState('');
+  const [heroDeleting, setHeroDeleting] = useState(false);
   const { scrollYProgress } = useScroll({
     target: journeyContainerRef,
     offset: ['start start', 'end end']
@@ -549,17 +551,53 @@ export function JourneyExperience() {
   const heroY = useTransform(pageProgress, [0, 0.15], [0, -40]);
   const heroOpacity = useTransform(pageProgress, [0, 0.08, 0.18], [1, 1, 0]);
 
+  useEffect(() => {
+    let delay = heroDeleting ? 45 : 85;
+    if (!heroDeleting && heroDisplayText === homeHeroPhrase) {
+      delay = 1300;
+    }
+    if (heroDeleting && heroDisplayText.length === 0) {
+      delay = 320;
+    }
+
+    const timer = window.setTimeout(() => {
+      if (!heroDeleting) {
+        if (heroDisplayText === homeHeroPhrase) {
+          setHeroDeleting(true);
+          return;
+        }
+        setHeroDisplayText(homeHeroPhrase.slice(0, heroDisplayText.length + 1));
+        return;
+      }
+
+      if (heroDisplayText.length === 0) {
+        setHeroDeleting(false);
+        return;
+      }
+
+      setHeroDisplayText(homeHeroPhrase.slice(0, heroDisplayText.length - 1));
+    }, delay);
+
+    return () => window.clearTimeout(timer);
+  }, [heroDeleting, heroDisplayText]);
+
   return (
     <main className="grain bg-void text-white">
       <section id="home" className="relative flex h-[100dvh] min-h-[100svh] w-full items-center justify-center overflow-hidden scroll-mt-28">
         <div className="flex h-full w-full items-center justify-center px-6 sm:px-10 lg:px-12">
           <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 w-full max-w-4xl text-center">
-            <p className="mb-8 text-sm uppercase tracking-[0.3em] text-gold/80 sm:mb-10 sm:text-base">Svarna Health</p>
-            <h1 className="text-balance font-display text-5xl leading-tight text-text/95 sm:text-6xl md:text-7xl lg:text-8xl">
-              Luxury Ayurvedic Functional Nutrition
+            <p className="mb-8 text-sm uppercase tracking-[0.3em] text-gold/80 sm:mb-10 sm:text-base">Svarna</p>
+            <h1
+              className="text-balance font-display text-5xl leading-tight text-text/95 sm:text-6xl md:text-7xl lg:text-8xl"
+              aria-label="SIP THE GOLD"
+            >
+              <span className="inline-flex min-h-[1.15em] items-baseline">
+                <span>{heroDisplayText}</span>
+                <span aria-hidden="true" className="about-type-cursor" />
+              </span>
             </h1>
             <p className="mx-auto mt-8 max-w-2xl text-sm leading-7 text-text/70 sm:mt-10 sm:text-base md:text-lg md:leading-8">
-              Edible skincare shaped through modern science, ancient botanicals, and a high-touch ritual of daily glow.
+              Small daily habits. Big long term results.
             </p>
             <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:mt-14 sm:flex-row">
               <PremiumButton>Start Your Ritual</PremiumButton>
@@ -590,8 +628,8 @@ export function JourneyExperience() {
       </section>
 
       <section className="relative mx-auto max-w-7xl px-6 pb-6 pt-4 sm:px-10 lg:px-12 lg:pb-10 lg:pt-6">
-        <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-          <div className="relative min-h-[22rem] overflow-hidden rounded-[1.6rem] border border-text/10 bg-secondary/35">
+        <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+          <div className="relative h-[14.5rem] sm:h-[17rem] lg:h-[20rem] overflow-hidden rounded-[1.6rem] border border-text/10 bg-secondary/35">
             <img
               src="/Website_Assets/Starting frame.png"
               alt="Svarna Health brand story artwork"
@@ -619,19 +657,16 @@ export function JourneyExperience() {
         <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <p className="text-[0.72rem] uppercase tracking-[0.42em] text-text/35">Shop the ritual</p>
-            <h3 className="mt-4 font-display text-4xl leading-tight text-text/92 sm:text-5xl">Premium products designed to sit beautifully in your daily routine.</h3>
+            <h3 className="mt-4 font-display text-4xl leading-tight text-text/92 sm:text-5xl">Fresh wellness shots to your doorstep, crafted with care.</h3>
           </div>
-          <p className="max-w-xl text-sm leading-7 text-text/62 sm:text-base">
-            Explore the product range and see how the visual identity carries across the collection.
-          </p>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {[
-            { src: '/Website_Assets/Product 1.jpeg', title: 'Product One' },
-            { src: '/Website_Assets/Product 2.jpeg', title: 'Product Two' },
-            { src: '/Website_Assets/Product 3.jpeg', title: 'Product Three' },
-            { src: '/Website_Assets/Product 4.jpeg', title: 'Product Four' }
+            { src: '/Website_Assets/Product 1.jpeg', title: 'Golden Immunity Shot' },
+            { src: '/Website_Assets/Product 2.jpeg', title: 'Svarna Shots' },
+            { src: '/Website_Assets/Product 3.jpeg', title: 'Green Elixir Shots' },
+            { src: '/Website_Assets/Product 4.jpeg', title: 'ABC Glow Shot' }
           ].map((product) => (
             <article
               key={product.title}
@@ -664,10 +699,10 @@ export function JourneyExperience() {
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <a
-                  href="mailto:hello@svarnahealth.com"
+                  href="mailto:svarnahealth@gmail.com"
                   className="rounded-full border border-text/10 bg-text/5 px-5 py-3 text-sm font-semibold text-text/82 transition hover:border-gold/30 hover:bg-gold/10"
                 >
-                  hello@svarnahealth.com
+                  svarnahealth@gmail.com
                 </a>
                 <a
                   href="tel:+910000000000"

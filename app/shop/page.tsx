@@ -19,82 +19,66 @@ type Product = {
 const products: Product[] = [
   {
     name: 'Golden Immunity Shot',
-    tagline: 'A bright, warming ritual for resilient mornings.',
+    tagline: 'Daily immunity support with a fresh Ayurvedic edge.',
     description:
-      'Golden Immunity Shot combines the depth of turmeric with gentle sweetness and spice. It is crafted to become your first sip before the day rushes in.',
-    ingredients: ['Haldi (Turmeric)', 'Black Pepper', 'Raw Honey'],
-    benefits: ['Supports immunity', 'Helps nutrient absorption', 'Comforts digestion'],
+      'Golden Immunity Shot is rooted in nature and crafted for gut, skin, hair, and total wellness.',
+    ingredients: ['Gooseberry (Amla)', 'Fresh Turmeric', 'Oranges', 'Black Peppercorns', 'Curry leaves'],
+    benefits: ['Better digestion', 'Healthy glowing skin', 'Stronger hair'],
     price: 'Rs. 549',
     image: '/Website_Assets/Product 1.jpeg',
     imageAlt: 'Golden Immunity Shot bottle with turmeric-inspired tones',
-    cta: 'Buy Now'
+    cta: 'Add to Cart'
   },
   {
-    name: 'Amla Vital Boost',
-    tagline: 'Crisp vitality with a clean citrus edge.',
+    name: 'Svarna Shots',
+    tagline: 'Designed for modern lifestyle and hectic mornings.',
     description:
-      'Amla Vital Boost is designed for people who want freshness without compromise. Tangy amla and citrus create a refreshing profile that feels light yet potent.',
-    ingredients: ['Amla', 'Citrus Peel', 'Lemon Zest'],
-    benefits: ['Rich in vitamin C', 'Daily antioxidant support', 'Helps maintain glow'],
+      'Svarna Shots combine nutrient-rich botanicals in one clean daily ritual. Crafted with care for people who want simple wellness without guesswork.',
+    ingredients: ['Amla', 'Turmeric', 'Beetroot', 'Apple', 'Carrot', 'Black Pepper'],
+    benefits: ['Boosts daily energy', 'Supports immunity', 'Easy morning ritual'],
     price: 'Rs. 599',
     image: '/Website_Assets/Product 2.jpeg',
-    imageAlt: 'Amla Vital Boost drink with fresh citrus ingredients',
+    imageAlt: 'Svarna Shots drink with fresh ingredients',
     cta: 'Add to Cart'
   },
   {
-    name: 'Beetroot Energy Elixir',
-    tagline: 'Earthy energy that carries you through the day.',
+    name: 'Green Elixir Shots',
+    tagline: 'A crisp green reset for gut and immunity.',
     description:
-      'Beetroot Energy Elixir is a bold blend for active schedules and focused afternoons. Its layered taste feels grounded, clean, and naturally energizing.',
-    ingredients: ['Beetroot', 'Lemon', 'Pink Salt'],
-    benefits: ['Supports stamina', 'Promotes circulation', 'Hydration-friendly minerals'],
+      'Green Elixir Shots bring together two potent ingredients for a clean, focused formulation. Perfect for daily drinkers who want clarity and consistency.',
+    ingredients: ['Gooseberry (Amla)', 'Curry leaves'],
+    benefits: ['Supports gut comfort', 'Boosts natural defenses', 'Helps daily detox'],
     price: 'Rs. 629',
     image: '/Website_Assets/Product 3.jpeg',
-    imageAlt: 'Beetroot Energy Elixir styled with beetroot and lemon',
-    cta: 'Buy Now'
-  },
-  {
-    name: 'Citrus Glow Drink',
-    tagline: 'Sunlit flavor for skin and wellness rituals.',
-    description:
-      'Citrus Glow Drink balances sweet orange notes with turmeric warmth. It is made for people who want functional nutrition that tastes vibrant and looks premium.',
-    ingredients: ['Orange', 'Turmeric', 'Lime'],
-    benefits: ['Supports skin radiance', 'Refreshing daytime lift', 'Immune-forward blend'],
-    price: 'Rs. 589',
-    image: '/Website_Assets/Product 4.jpeg',
-    imageAlt: 'Citrus Glow Drink with orange and turmeric accents',
+    imageAlt: 'Green Elixir Shots with gooseberry and curry leaves',
     cta: 'Add to Cart'
   },
   {
-    name: 'Detox Green Fusion',
-    tagline: 'A clean botanical reset, crafted for balance.',
+    name: 'ABC Glow Shot',
+    tagline: 'Fruit and botanical balance for visible everyday glow.',
     description:
-      'Detox Green Fusion brings herbs and greens into one smooth ritual. It is tailored for mindful evenings and slow recovery days where nourishment matters most.',
-    ingredients: ['Moringa', 'Mint', 'Wheatgrass'],
-    benefits: ['Gentle detox support', 'Helps gut comfort', 'Botanical mineral profile'],
-    price: 'Rs. 649',
-    image: '/Website_Assets/Starting frame.png',
-    imageAlt: 'Detox Green Fusion inspired by fresh herbs and greens',
-    cta: 'Buy Now'
+      'ABC Glow Shot is crafted for skin and wellness seekers who value clean ingredients. A vibrant blend to support your busy routine with ease.',
+    ingredients: ['Apple', 'Beetroot', 'Carrot', 'Gooseberry (Amla)', 'Curry leaves'],
+    benefits: ['Supports glowing skin', 'Nourishes hair health', 'Daily wellness support'],
+    price: 'Rs. 589',
+    image: '/Website_Assets/Product 4.jpeg',
+    imageAlt: 'ABC Glow Shot with apple beetroot carrot and herbs',
+    cta: 'Add to Cart'
   }
 ];
 
 const features = [
   {
-    title: '100% Natural Ingredients',
-    body: 'Real botanicals, cold-processed integrity, and transparent sourcing from farm to bottle.'
+    title: 'Clean Ingredients',
+    body: 'No color, no preservatives, and no added salt or sugar.'
   },
   {
-    title: 'No Preservatives',
-    body: 'No unnecessary fillers. Just clean formulations designed for modern daily routines.'
+    title: 'Rooted in Nature',
+    body: 'Fresh botanicals inspired by Ayurveda and crafted for daily use.'
   },
   {
-    title: 'Freshly Crafted',
-    body: 'Produced in mindful small batches to preserve taste, nutrients, and aromatic depth.'
-  },
-  {
-    title: 'Tradition + Science',
-    body: 'Ayurvedic wisdom translated through nutritional science for measurable everyday value.'
+    title: 'Crafted for Wellness',
+    body: 'Crafted for gut, skin, hair, and overall wellness with consistent daily support.'
   }
 ];
 
@@ -117,7 +101,7 @@ export default function ShopPage() {
           <p className="text-[0.72rem] uppercase tracking-[0.42em] text-text/45">Shop Wellness</p>
           <h1 className="mt-5 font-display text-5xl leading-tight text-text/94 sm:text-6xl lg:text-7xl">Our Drinks</h1>
           <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-text/72 sm:text-base">
-            Each Svarna Health blend is crafted as a daily wellness chapter, where ingredients, flavor, and function move together in one premium ritual.
+            SIP THE GOLD. Small daily habits. Big long term results.
           </p>
           <div className="mt-9">
             <Link
@@ -190,6 +174,9 @@ export default function ShopPage() {
 
                   <div className="mt-7 flex flex-wrap items-center gap-4">
                     <p className="font-display text-2xl text-text/94">{product.price}</p>
+                    <p className="rounded-full border border-text/12 bg-text/5 px-3 py-1 text-xs uppercase tracking-[0.22em] text-text/70">
+                      500ml lasts 15 days
+                    </p>
                     <Link
                       href="/#contact"
                       className="inline-flex items-center rounded-full border border-text/14 bg-text/8 px-5 py-2.5 text-sm font-semibold tracking-[0.15em] text-text/90 transition hover:border-[rgb(var(--color-accent)/0.55)] hover:bg-[rgb(var(--color-accent)/0.14)]"
@@ -217,7 +204,7 @@ export default function ShopPage() {
             <h3 className="mt-4 font-display text-4xl text-text/94 sm:text-5xl">Crafted With Purpose</h3>
           </motion.div>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, index) => (
               <motion.article
                 key={feature.title}
@@ -236,7 +223,7 @@ export default function ShopPage() {
       </section>
 
       <section className="relative px-6 py-16 sm:px-10 lg:px-12 lg:py-20">
-        <div className="mx-auto grid max-w-7xl gap-7 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -244,14 +231,15 @@ export default function ShopPage() {
             transition={{ duration: 0.75 }}
           >
             <p className="text-[0.72rem] uppercase tracking-[0.42em] text-text/45">Experience</p>
-            <h3 className="mt-4 font-display text-4xl leading-tight text-text/94 sm:text-5xl">Make wellness a daily habit</h3>
+            <h3 className="mt-4 font-display text-4xl leading-tight text-text/94 sm:text-5xl">How to enjoy your drink</h3>
             <p className="mt-5 max-w-2xl text-sm leading-7 text-text/72 sm:text-base">
-              Whether it starts with a calm morning reset or follows your fitness routine, Svarna Health fits naturally into your day. Every drink is designed to feel intentional, not transactional.
+              A four-step Svarna ritual designed for hectic mornings, clean habits, and long-term wellness consistency.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <span className="rounded-full border border-text/12 bg-text/6 px-4 py-2 text-xs uppercase tracking-[0.24em] text-text/75">Morning Routine</span>
-              <span className="rounded-full border border-text/12 bg-text/6 px-4 py-2 text-xs uppercase tracking-[0.24em] text-text/75">Fitness Lifestyle</span>
-              <span className="rounded-full border border-text/12 bg-text/6 px-4 py-2 text-xs uppercase tracking-[0.24em] text-text/75">Evening Recovery</span>
+            <div className="mt-8 rounded-[1.6rem] border border-text/10 bg-[linear-gradient(180deg,rgb(var(--color-text)/0.05),rgb(var(--color-text)/0.02))] p-6 backdrop-blur-md sm:p-7">
+              <p className="text-[0.68rem] uppercase tracking-[0.32em] text-text/45">Who needs it</p>
+              <p className="mt-3 text-sm leading-7 text-text/74">
+                Busy professionals, fitness lovers, entrepreneurs, skin and gut health seekers, and anyone wanting simple daily wellness.
+              </p>
             </div>
           </motion.div>
 
@@ -260,25 +248,43 @@ export default function ShopPage() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.75 }}
-            className="grid gap-5 sm:grid-cols-2"
+            className="relative"
           >
-            <div className="group overflow-hidden rounded-[1.5rem] border border-text/10 bg-text/6 shadow-[0_15px_50px_rgba(0,0,0,0.22)]">
-              <Image
-                src="/Website_Assets/Product 2.jpeg"
-                alt="Morning wellness moment with Svarna Health"
-                width={900}
-                height={900}
-                className="h-64 w-full object-contain transition duration-700 group-hover:scale-[1.04]"
-              />
-            </div>
-            <div className="group overflow-hidden rounded-[1.5rem] border border-text/10 bg-text/6 shadow-[0_15px_50px_rgba(0,0,0,0.22)]">
-              <Image
-                src="/Website_Assets/Product 3.jpeg"
-                alt="Active lifestyle visual with Svarna Health"
-                width={900}
-                height={900}
-                className="h-64 w-full object-contain transition duration-700 group-hover:scale-[1.04]"
-              />
+            <div className="pointer-events-none absolute bottom-6 left-8 top-6 w-px bg-[linear-gradient(180deg,rgba(205,165,136,0.2),rgba(205,165,136,0.7),rgba(205,165,136,0.2))]" />
+            <div className="grid gap-4 sm:gap-5">
+              {[
+                {
+                  step: '01',
+                  title: 'Shake the bottle well',
+                  body: 'Natural ingredients settle. Give it a good shake before every use.'
+                },
+                {
+                  step: '02',
+                  title: 'Pour 30 ml',
+                  body: 'Fill one shot glass with your daily dose for easy consistency.'
+                },
+                {
+                  step: '03',
+                  title: 'Drink on an empty stomach',
+                  body: 'Best enjoyed first thing in the morning for a clean wellness start.'
+                },
+                {
+                  step: '04',
+                  title: 'Now go run the world',
+                  body: 'Small daily habits. Big long term results.'
+                }
+              ].map((item) => (
+                <article
+                  key={item.step}
+                  className="relative ml-5 rounded-[1.4rem] border border-text/10 bg-[linear-gradient(180deg,rgb(var(--color-text)/0.06),rgb(var(--color-text)/0.03))] px-5 py-4 backdrop-blur-md"
+                >
+                  <span className="absolute -left-8 top-5 inline-flex h-6 w-6 items-center justify-center rounded-full border border-gold/35 bg-[rgb(var(--color-primary))] text-[0.62rem] font-semibold tracking-[0.08em] text-gold">
+                    {item.step}
+                  </span>
+                  <h4 className="font-display text-2xl leading-tight text-text/92">{item.title}</h4>
+                  <p className="mt-2 text-sm leading-6 text-text/72">{item.body}</p>
+                </article>
+              ))}
             </div>
           </motion.div>
         </div>

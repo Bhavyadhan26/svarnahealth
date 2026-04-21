@@ -9,8 +9,8 @@ export function SiteFooter() {
           {/* Left: Brand */}
           <div className="flex flex-col items-center gap-4 lg:items-start">
             <div>
-              <h3 className="font-display text-lg tracking-[0.1em] text-text/92">Svarna Health</h3>
-              <p className="mt-1 text-[0.62rem] uppercase tracking-[0.28em] text-text/55">Ayurvedic functional nutrition</p>
+              <h3 className="font-display text-lg tracking-[0.1em] text-text/92">Svarna</h3>
+              <p className="mt-1 text-[0.62rem] uppercase tracking-[0.28em] text-text/55">Sip The Gold</p>
             </div>
           </div>
 
@@ -37,7 +37,7 @@ export function SiteFooter() {
               </a>
 
               <a
-                href="mailto:hello@svarnahealth.com"
+                href="mailto:svarnahealth@gmail.com"
                 className="inline-flex items-center justify-center rounded-full border border-text/10 bg-text/5 p-2.5 transition hover:border-text/20 hover:bg-text/10"
                 aria-label="Email"
               >

@@ -50,11 +50,11 @@ export function SiteNavbar() {
       className="sticky top-0 z-50 w-full bg-[linear-gradient(180deg,rgb(var(--color-primary)/0.96),rgb(var(--color-primary)/0.86))] backdrop-blur-xl"
     >
       <div className="flex w-full items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/#home" className="flex min-w-0 items-center gap-3 rounded-none px-0 py-1 transition" aria-label="Svarna Health home">
+        <Link href="/#home" className="flex min-w-0 items-center gap-3 rounded-none px-0 py-1 transition" aria-label="Svarna home">
           <span className="shrink-0">
             <Image
               src="/Website_Assets/logo.jpg"
-              alt="Svarna Health logo"
+              alt="Svarna logo"
               width={88}
               height={44}
               className="h-11 w-auto"
@@ -62,7 +62,8 @@ export function SiteNavbar() {
             />
           </span>
           <span className="flex min-w-0 flex-col leading-none">
-            <span className="font-display text-lg tracking-[0.1em] text-text/92 sm:text-xl">Svarna Health</span>
+            <span className="font-display text-lg tracking-[0.1em] text-text/92 sm:text-xl">Svarna</span>
+            <span className="mt-1 text-[0.62rem] uppercase tracking-[0.28em] text-text/55">Nurturing Immunity, Crafted Naturally</span>
           </span>
         </Link>
 

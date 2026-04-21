@@ -17,8 +17,8 @@ const body = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: 'Svarna Health | Luxury Ayurvedic Functional Nutrition',
-  description: 'A premium scrollytelling landing page for ritual wellness and beauty-from-within positioning.'
+  title: 'Svarna | SIP THE GOLD',
+  description: 'Ancient Wisdom | Modern Care. Small daily habits. Big long term results.'
 };
 
 export default function RootLayout({
