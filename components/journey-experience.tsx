@@ -498,7 +498,7 @@ export function JourneyExperience() {
 
   return (
     <main className="grain bg-void text-white">
-      <section className="relative flex h-[100dvh] min-h-[100svh] w-full items-center justify-center overflow-hidden">
+      <section id="home" className="relative flex h-[100dvh] min-h-[100svh] w-full items-center justify-center overflow-hidden scroll-mt-28">
         <div className="flex h-full w-full items-center justify-center px-6 sm:px-10 lg:px-12">
           <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 w-full max-w-4xl text-center">
             <p className="mb-8 text-sm uppercase tracking-[0.3em] text-gold/80 sm:mb-10 sm:text-base">Svarna Health</p>
@@ -524,7 +524,7 @@ export function JourneyExperience() {
 
       <section
         ref={journeyContainerRef}
-        className="min-h-[420dvh] min-h-[420svh] w-full pb-20"
+        className="min-h-[420dvh] min-h-[420svh] w-full pb-20 scroll-mt-28"
         style={{ position: 'relative' }}
       >
         <div className="sticky top-0 flex h-[100dvh] min-h-[100svh] items-center">
@@ -532,19 +532,99 @@ export function JourneyExperience() {
         </div>
       </section>
 
-      <PhilosophySection />
+      <section id="about" className="scroll-mt-28">
+        <PhilosophySection />
+      </section>
 
-      <section className="relative mx-auto max-w-6xl px-6 pb-24 pt-10 sm:px-10 lg:px-12 lg:pb-32">
+      <section className="relative mx-auto max-w-7xl px-6 pb-6 pt-4 sm:px-10 lg:px-12 lg:pb-10 lg:pt-6">
+        <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+          <div className="relative min-h-[22rem] overflow-hidden rounded-[1.6rem] border border-text/10 bg-secondary/35">
+            <img
+              src="/Website_Assets/Starting frame.png"
+              alt="Svarna Health brand story artwork"
+              className="h-full w-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.06),rgba(5,5,5,0.55))]" />
+            <div className="absolute left-5 top-5 rounded-full border border-text/10 bg-void/65 px-3 py-1 text-[0.62rem] uppercase tracking-[0.34em] text-text/75 backdrop-blur-md">
+              Our Story
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center p-3 sm:p-4 lg:p-6">
+            <p className="text-[0.72rem] uppercase tracking-[0.42em] text-text/35">About the brand</p>
+            <h3 className="mt-4 max-w-2xl font-display text-4xl leading-tight text-text/92 sm:text-5xl">
+              Crafted as a daily ritual of nourishment, clarity, and inner glow.
+            </h3>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-text/68 sm:text-base">
+              Svarna Health unites premium Ayurvedic ingredients, refined formulation, and a modern wellness aesthetic into a calm, elevated experience.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="shop" className="scroll-mt-28 relative mx-auto max-w-7xl px-6 py-20 sm:px-10 lg:px-12 lg:py-28">
+        <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-[0.72rem] uppercase tracking-[0.42em] text-text/35">Shop the ritual</p>
+            <h3 className="mt-4 font-display text-4xl leading-tight text-text/92 sm:text-5xl">Premium products designed to sit beautifully in your daily routine.</h3>
+          </div>
+          <p className="max-w-xl text-sm leading-7 text-text/62 sm:text-base">
+            Explore the product range and see how the visual identity carries across the collection.
+          </p>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          {[
+            { src: '/Website_Assets/Product 1.jpeg', title: 'Product One' },
+            { src: '/Website_Assets/Product 2.jpeg', title: 'Product Two' },
+            { src: '/Website_Assets/Product 3.jpeg', title: 'Product Three' },
+            { src: '/Website_Assets/Product 4.jpeg', title: 'Product Four' }
+          ].map((product) => (
+            <article
+              key={product.title}
+              className="group overflow-hidden rounded-[1.8rem] border border-text/10 bg-[linear-gradient(180deg,rgb(var(--color-text)/0.05),rgb(var(--color-text)/0.02))] p-3 backdrop-blur-xl"
+            >
+              <div className="overflow-hidden rounded-[1.4rem] border border-text/8 bg-surface/90">
+                <img
+                  src={product.src}
+                  alt={product.title}
+                  className="h-72 w-full object-cover object-center transition duration-500 group-hover:scale-[1.03]"
+                />
+              </div>
+              <div className="px-2 pb-2 pt-4">
+                <p className="text-[0.65rem] uppercase tracking-[0.34em] text-gold/65">Collection</p>
+                <h4 className="mt-2 font-display text-2xl text-text/92">{product.title}</h4>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="contact" className="scroll-mt-28 relative mx-auto max-w-6xl px-6 pb-24 pt-10 sm:px-10 lg:px-12 lg:pb-32">
         <div className="rounded-[2rem] border border-text/10 bg-[radial-gradient(circle_at_top,rgba(205,165,136,0.16),transparent_30%),linear-gradient(180deg,rgb(var(--color-text)/0.05),rgb(var(--color-text)/0.02))] p-8 shadow-aura sm:p-12">
-          <p className="text-[0.68rem] uppercase tracking-[0.42em] text-text/35">Subscribe to the ritual</p>
-          <div className="mt-4 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+          <p className="text-[0.68rem] uppercase tracking-[0.42em] text-text/35">Contact & subscribe</p>
+          <div className="mt-4 grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
             <div>
               <h3 className="font-display text-4xl leading-tight text-text/92 sm:text-5xl">Start Your Ritual</h3>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-text/60 sm:text-base">
                 Join a considered wellness experience built around consistency, beauty, and functional nourishment.
               </p>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href="mailto:hello@svarnahealth.com"
+                  className="rounded-full border border-text/10 bg-text/5 px-5 py-3 text-sm font-semibold text-text/82 transition hover:border-gold/30 hover:bg-gold/10"
+                >
+                  hello@svarnahealth.com
+                </a>
+                <a
+                  href="tel:+910000000000"
+                  className="rounded-full border border-text/10 bg-text/5 px-5 py-3 text-sm font-semibold text-text/82 transition hover:border-gold/30 hover:bg-gold/10"
+                >
+                  Call us
+                </a>
+              </div>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row lg:justify-self-end">
+            <div className="grid gap-3 sm:grid-cols-2 lg:justify-self-end">
               <input
                 suppressHydrationWarning
                 aria-label="Email address"
