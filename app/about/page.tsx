@@ -35,9 +35,9 @@ const ingredients = [
 ];
 
 const whyChooseUs = [
-  { title: 'Clean Ingredients', description: 'No colour, no preservatives, no salt/sugar added.' },
-  { title: 'Rooted In Nature', description: 'Ancient Wisdom | Modern Care in every formulation.' },
-  { title: 'Crafted For Gut, Skin, Hair', description: 'Designed as a daily wellness ritual for visible long-term results.' },
+  { title: 'Clean Ingredients', description: ( <> No colour. <br /> No preservatives. <br /> No Salt/Sugar added.</> ) },
+  { title: 'Rooted In Nature', description: ( <> Ancient Wisdom. <br />Modern care in every formulation.</> ) },
+  { title: 'Crafted For Gut, Skin & Hair', description: 'Designed as a daily wellness ritual for visible long term results.' },
   { title: 'Modern Lifestyle Ready', description: 'Easy to enjoy even on hectic mornings and packed schedules.' },
   { title: 'Crafted With Care', description: 'Fresh wellness shots made with ingredient integrity at the core.' }
 ];

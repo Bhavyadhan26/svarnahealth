@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type HTMLMotionProps } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { frameSources, philosophyCards, stageCopy } from '@/lib/frame-sources';
 
@@ -28,15 +28,22 @@ function ScrollIndicator({ progress }: { progress: ReturnType<typeof useScroll>[
   );
 }
 
-function PremiumButton({ children }: { children: React.ReactNode }) {
+function PremiumButton({
+  children,
+  className,
+  type,
+  ...props
+}: { children: React.ReactNode } & HTMLMotionProps<'button'>) {
   return (
     <motion.button
       suppressHydrationWarning
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.98 }}
-      className="group inline-flex items-center justify-center rounded-full border border-text/12 bg-text/6 px-6 py-3 text-sm font-semibold tracking-[0.22em] text-text/90 backdrop-blur-md transition-colors hover:border-gold/30 hover:bg-gold/10"
+      type={type ?? 'button'}
+      className={`group inline-flex items-center justify-center rounded-full border border-text/12 bg-text/6 px-6 py-3 text-sm font-semibold tracking-[0.22em] text-text/90 backdrop-blur-md transition-colors hover:border-gold/30 hover:bg-gold/10 disabled:cursor-not-allowed disabled:opacity-70 ${className ?? ''}`}
+      {...props}
     >
-      <span className="mr-3 h-2 w-2 rounded-full bg-gold shadow-[0_0_24px_rgba(205,165,136,0.9)] transition-transform group-hover:scale-125" />
+      <span className="mr-3 h-2 w-2 rounded-full bg-gold shadow-[0_0_24px_rgba(205,165,136,0.9)] transition-transform group-hover:scale-125 group-disabled:scale-100" />
       {children}
     </motion.button>
   );
@@ -540,9 +547,13 @@ function PhilosophySection() {
 
 export function JourneyExperience() {
   const journeyContainerRef = useRef<HTMLDivElement | null>(null);
+  const joinedResetTimerRef = useRef<number | null>(null);
   const { scrollYProgress: pageProgress } = useScroll();
   const [heroDisplayText, setHeroDisplayText] = useState('');
   const [heroDeleting, setHeroDeleting] = useState(false);
+  const [contactEmail, setContactEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
+  const [joined, setJoined] = useState(false);
   const { scrollYProgress } = useScroll({
     target: journeyContainerRef,
     offset: ['start start', 'end end']
@@ -580,6 +591,38 @@ export function JourneyExperience() {
 
     return () => window.clearTimeout(timer);
   }, [heroDeleting, heroDisplayText]);
+
+  useEffect(() => {
+    return () => {
+      if (joinedResetTimerRef.current !== null) {
+        window.clearTimeout(joinedResetTimerRef.current);
+      }
+    };
+  }, []);
+
+  const isValidEmail = useCallback((value: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+  }, []);
+
+  const handleJoinList = useCallback(() => {
+    if (!isValidEmail(contactEmail)) {
+      setEmailError(true);
+      return;
+    }
+
+    setEmailError(false);
+    setContactEmail('');
+    setJoined(true);
+
+    if (joinedResetTimerRef.current !== null) {
+      window.clearTimeout(joinedResetTimerRef.current);
+    }
+
+    joinedResetTimerRef.current = window.setTimeout(() => {
+      setJoined(false);
+      joinedResetTimerRef.current = null;
+    }, 5000);
+  }, [contactEmail, isValidEmail]);
 
   return (
     <main className="grain bg-void text-white">
@@ -705,7 +748,7 @@ export function JourneyExperience() {
                   svarnahealth@gmail.com
                 </a>
                 <a
-                  href="tel:+910000000000"
+                  href="tel:+918961256620"
                   className="rounded-full border border-text/10 bg-text/5 px-5 py-3 text-sm font-semibold text-text/82 transition hover:border-gold/30 hover:bg-gold/10"
                 >
                   Call us
@@ -718,10 +761,35 @@ export function JourneyExperience() {
                 aria-label="Email address"
                 type="email"
                 placeholder="Email address"
-                className="min-w-0 rounded-full border border-text/10 bg-secondary/50 px-5 py-3 text-sm text-text/90 outline-none transition placeholder:text-text/30 focus:border-gold/50"
+                value={contactEmail}
+                onChange={(event) => {
+                  const nextEmail = event.target.value;
+                  setContactEmail(nextEmail);
+                  if (emailError) {
+                    setEmailError(!isValidEmail(nextEmail));
+                  }
+                }}
+                className={`min-w-0 rounded-full border bg-secondary/50 px-5 py-3 text-sm text-text/90 outline-none transition placeholder:text-text/30 focus:border-gold/50 ${emailError ? 'border-red-400/70' : 'border-text/10'}`}
               />
-              <PremiumButton>Join the List</PremiumButton>
+              <PremiumButton onClick={handleJoinList} aria-live="polite">
+                <span className="relative inline-flex min-w-[8.8rem] justify-center overflow-hidden">
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                      key={joined ? 'joined' : 'join'}
+                      initial={{ opacity: 0, y: 8, filter: 'blur(2px)' }}
+                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      exit={{ opacity: 0, y: -8, filter: 'blur(1px)' }}
+                      transition={{ duration: 0.28, ease: 'easeOut' }}
+                    >
+                      {joined ? 'Joined😉' : 'Join the List'}
+                    </motion.span>
+                  </AnimatePresence>
+                </span>
+              </PremiumButton>
             </div>
+            {emailError && (
+              <p className="lg:col-start-2 lg:justify-self-end px-3 text-xs text-red-300">Please enter a valid email address.</p>
+            )}
           </div>
         </div>
       </section>
