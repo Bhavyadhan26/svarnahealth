@@ -105,10 +105,10 @@ export default function AboutPage() {
           >
             <p className="mb-4 text-xs uppercase tracking-[0.3em] text-gold/80 sm:mb-5 sm:text-sm">Our Story</p>
             <h1
-              className="font-display text-[clamp(2.45rem,8.5vw,7rem)] leading-[1.03] text-text/95"
+              className="font-display text-[clamp(1.75rem,8vw,7rem)] leading-none tracking-[-0.02em] text-text/95 sm:text-[clamp(2.2rem,6vw,7rem)] lg:text-[clamp(2.45rem,5.5vw,7rem)]"
               aria-label="Redefining Wellness, One ritual at a time"
             >
-              <span className="inline-flex min-h-[1.15em] items-baseline">
+              <span className="inline whitespace-normal break-words">
                 <span>{displayText}</span>
                 <span aria-hidden="true" className="about-type-cursor" />
               </span>

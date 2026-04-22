@@ -591,7 +591,7 @@ export function JourneyExperience() {
               className="text-balance font-display text-5xl leading-tight text-text/95 sm:text-6xl md:text-7xl lg:text-8xl"
               aria-label="SIP THE GOLD"
             >
-              <span className="inline-flex min-h-[1.15em] items-baseline">
+              <span className="inline whitespace-normal break-words">
                 <span>{heroDisplayText}</span>
                 <span aria-hidden="true" className="about-type-cursor" />
               </span>
