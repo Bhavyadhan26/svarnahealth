@@ -101,7 +101,7 @@ export default function ShopPage() {
           <p className="text-[0.72rem] uppercase tracking-[0.42em] text-text/45">Shop Wellness</p>
           <h1 className="mt-5 font-display text-5xl leading-tight text-text/94 sm:text-6xl lg:text-7xl">Our Drinks</h1>
           <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-text/72 sm:text-base">
-            SIP THE GOLD. Small daily habits. Big long term results.
+            SIP THE GOLD.
           </p>
           <div className="mt-9">
             <Link
@@ -235,12 +235,12 @@ export default function ShopPage() {
             <p className="mt-5 max-w-2xl text-sm leading-7 text-text/72 sm:text-base">
               A four-step Svarna ritual designed for hectic mornings, clean habits, and long-term wellness consistency.
             </p>
-            <div className="mt-8 rounded-[1.6rem] border border-text/10 bg-[linear-gradient(180deg,rgb(var(--color-text)/0.05),rgb(var(--color-text)/0.02))] p-6 backdrop-blur-md sm:p-7">
+            {/* <div className="mt-8 rounded-[1.6rem] border border-text/10 bg-[linear-gradient(180deg,rgb(var(--color-text)/0.05),rgb(var(--color-text)/0.02))] p-6 backdrop-blur-md sm:p-7">
               <p className="text-[0.68rem] uppercase tracking-[0.32em] text-text/45">Who needs it</p>
               <p className="mt-3 text-sm leading-7 text-text/74">
                 Busy professionals, fitness lovers, entrepreneurs, skin and gut health seekers, and anyone wanting simple daily wellness.
               </p>
-            </div>
+            </div> */}
           </motion.div>
 
           <motion.div

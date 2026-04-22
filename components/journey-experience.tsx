@@ -631,10 +631,10 @@ export function JourneyExperience() {
           <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 w-full max-w-4xl text-center">
             <p className="mb-8 text-sm uppercase tracking-[0.3em] text-gold/80 sm:mb-10 sm:text-base">Svarna</p>
             <h1
-              className="text-balance font-display text-5xl leading-tight text-text/95 sm:text-6xl md:text-7xl lg:text-8xl"
+              className="font-display text-[clamp(2.2rem,12vw,4.75rem)] leading-[1.05] text-text/95 sm:text-6xl md:text-7xl lg:text-8xl"
               aria-label="SIP THE GOLD"
             >
-              <span className="inline whitespace-normal break-words">
+              <span className="inline-block whitespace-nowrap">
                 <span>{heroDisplayText}</span>
                 <span aria-hidden="true" className="about-type-cursor" />
               </span>

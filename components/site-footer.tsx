@@ -10,7 +10,7 @@ export function SiteFooter() {
           <div className="flex flex-col items-center gap-4 lg:items-start">
             <div>
               <h3 className="font-display text-lg tracking-[0.1em] text-text/92">Svarna</h3>
-              <p className="mt-1 text-[0.62rem] uppercase tracking-[0.28em] text-text/55">Sip The Gold</p>
+              <p className="mt-1 text-[0.62rem] uppercase tracking-[0.28em] text-text/55">Nurturing Immunity, Crafted Naturally</p>
             </div>
           </div>
 

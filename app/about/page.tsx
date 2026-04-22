@@ -114,7 +114,7 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-text/70 sm:mt-6 sm:text-base sm:leading-7 md:text-lg">
-              Svarna blends the wisdom of ancient Ayurveda with modern convenience. SIP THE GOLD. Small daily habits. Big long term results.
+              Svarna blends the wisdom of ancient Ayurveda with modern convenience. 
             </p>
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-8 sm:flex-row">
               <Link
