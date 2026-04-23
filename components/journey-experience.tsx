@@ -516,7 +516,7 @@ function FrameCanvas({ scrollProgress }: FrameCanvasProps) {
 
 function PhilosophySection() {
   return (
-    <section className="relative mx-auto max-w-7xl px-6 py-24 sm:px-10 lg:px-12 lg:py-32">
+    <section className="relative mx-auto max-w-7xl px-6 pb-24 pt-10 sm:px-10 sm:pb-28 sm:pt-12 lg:px-12 lg:pb-32 lg:pt-14">
       <div className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -588,7 +588,7 @@ function PhilosophySection() {
 
           <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
             <a
-              href="#shop"
+              href="/shop"
               className="inline-flex items-center justify-center rounded-full border border-text/14 bg-secondary/72 px-8 py-3 text-lg font-semibold text-text/92 transition hover:bg-secondary/86"
             >
               Shop the ritual
@@ -698,7 +698,13 @@ export function JourneyExperience() {
               Small daily habits. Big long term results.
             </p>
             <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:mt-14 sm:flex-row">
-              <PremiumButton>Start Your Ritual</PremiumButton>
+              <PremiumButton
+                onClick={() => {
+                  journeyContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
+              >
+                Start Your Ritual
+              </PremiumButton>
               <span className="rounded-full border border-text/10 bg-text/5 px-5 py-3 text-xs text-text/60 backdrop-blur-sm sm:text-sm">
                 Beauty from within, reimagined.
               </span>
@@ -712,8 +718,9 @@ export function JourneyExperience() {
       </section>
 
       <section
+        id="journey"
         ref={journeyContainerRef}
-        className="min-h-[300dvh] min-h-[300svh] w-full pb-20 scroll-mt-28"
+        className="min-h-[300dvh] min-h-[300svh] w-full pb-8 scroll-mt-28 sm:pb-10"
         style={{ position: 'relative' }}
       >
         <div className="sticky top-0 flex h-[100dvh] min-h-[100svh] items-center">
