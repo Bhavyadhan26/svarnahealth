@@ -82,10 +82,17 @@ const features = [
   }
 ];
 
+const heroMarqueeItems = [
+  '▴No Sugar, No Preservatives▴',
+  '▴100% Cold-Pressed Juices▴',
+  '▴Supports Gut Health▴',
+  '▴Made from Whole, Fresh Ingredients▴'
+];
+
 export default function ShopPage() {
   return (
     <main className="grain bg-void text-white">
-      <section className="relative overflow-hidden px-6 pb-16 pt-28 sm:px-10 lg:px-12 lg:pb-24 lg:pt-36">
+      <section className="relative flex min-h-[calc(100dvh-4.5rem)] min-h-[calc(100svh-4.5rem)] items-center justify-center overflow-hidden px-6 pb-20 pt-20 sm:px-10 sm:pb-24 sm:pt-24 lg:px-12 lg:pb-24 lg:pt-28">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-[8%] top-20 h-40 w-40 rounded-full bg-[rgb(var(--color-accent)/0.22)] blur-3xl" />
           <div className="absolute right-[10%] top-28 h-48 w-48 rounded-full bg-[rgb(var(--color-secondary)/0.24)] blur-3xl" />
@@ -113,6 +120,25 @@ export default function ShopPage() {
             </Link>
           </div>
         </motion.div>
+
+        <div className="absolute inset-x-0 bottom-5 z-10 border-y border-text/10 bg-[rgb(var(--color-secondary)/0.88)] py-3 backdrop-blur-md sm:bottom-4">
+          <div className="overflow-hidden">
+            <motion.div
+              className="flex w-max items-center whitespace-nowrap"
+              animate={{ x: ['0%', '-50%'] }}
+              transition={{ duration: 26, ease: 'linear', repeat: Infinity }}
+            >
+              {[...heroMarqueeItems, ...heroMarqueeItems].map((item, index) => (
+                <span
+                  key={`${item}-${index}`}
+                  className="px-8 text-[clamp(0.95rem,1.8vw,1.05rem)] font-semibold tracking-[0.02em] text-white"
+                >
+                  {item}
+                </span>
+              ))}
+            </motion.div>
+          </div>
+        </div>
       </section>
 
       <section id="range" className="relative mx-auto max-w-7xl space-y-14 px-6 pb-14 sm:px-10 lg:space-y-16 lg:px-12 lg:pb-20">
@@ -173,10 +199,7 @@ export default function ShopPage() {
                   </div>
 
                   <div className="mt-7 flex flex-wrap items-center gap-4">
-                    <p className="font-display text-2xl text-text/94">{product.price}</p>
-                    <p className="rounded-full border border-text/12 bg-text/5 px-3 py-1 text-xs uppercase tracking-[0.22em] text-text/70">
-                      500ml lasts 15 days
-                    </p>
+                    <p className="font-display text-2xl text-text/94">Rs. 549/500ML Bottle</p>
                     <Link
                       href="/#contact"
                       className="inline-flex items-center rounded-full border border-text/14 bg-text/8 px-5 py-2.5 text-sm font-semibold tracking-[0.15em] text-text/90 transition hover:border-[rgb(var(--color-accent)/0.55)] hover:bg-[rgb(var(--color-accent)/0.14)]"

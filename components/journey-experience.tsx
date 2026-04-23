@@ -517,29 +517,84 @@ function FrameCanvas({ scrollProgress }: FrameCanvasProps) {
 function PhilosophySection() {
   return (
     <section className="relative mx-auto max-w-7xl px-6 py-24 sm:px-10 lg:px-12 lg:py-32">
-      <div className="mb-14 max-w-2xl">
-        <p className="text-[0.72rem] uppercase tracking-[0.42em] text-text/35">Product philosophy</p>
-        <h3 className="mt-4 font-display text-4xl leading-tight text-text/90 sm:text-5xl">Luxury wellness built as a ritual, not a routine.</h3>
-      </div>
+      <div className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
+          transition={{ duration: 0.7 }}
+          className="relative"
+        >
+          <div className="grid grid-cols-2 gap-3 sm:gap-5">
+            <article className="relative aspect-square min-h-0 w-full overflow-hidden rounded-[1.45rem] border border-text/10 bg-surface/20">
+              <img
+                src="/Website_Assets/Product 4.jpeg"
+                alt="ABC Glow Shot"
+                className="absolute inset-0 h-full w-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.38))]" />
+            </article>
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        {philosophyCards.map((card, index) => (
-          <motion.article
-            key={card.title}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-12% 0px -12% 0px' }}
-            transition={{ duration: 0.7, delay: index * 0.08 }}
-            className="group relative overflow-hidden rounded-[1.8rem] border border-text/10 bg-[linear-gradient(180deg,rgb(var(--color-text)/0.04),rgb(var(--color-text)/0.02))] p-7 backdrop-blur-xl"
-          >
-            <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-[radial-gradient(circle_at_top,rgba(205,165,136,0.18),transparent_55%)]" />
-            <div className="relative">
-              <p className="mb-5 text-[0.65rem] uppercase tracking-[0.34em] text-gold/70">0{index + 1}</p>
-              <h4 className="font-display text-3xl text-text/90">{card.title}</h4>
-              <p className="mt-4 max-w-md text-sm leading-7 text-text/58">{card.body}</p>
-            </div>
-          </motion.article>
-        ))}
+            <article className="relative flex aspect-square min-h-0 w-full flex-col justify-center gap-3 rounded-[1.45rem] border border-text/10 bg-[rgb(var(--color-secondary)/0.85)] p-3 sm:p-5">
+              <p className="text-2xl text-gold/90">⚡</p>
+              <h4 className="font-display text-[clamp(1.15rem,4vw,2.35rem)] leading-tight text-text/92">Rooted In Nature</h4>
+              <p className="text-[clamp(0.68rem,1.65vw,1rem)] leading-[1.35] tracking-[0.06em] text-text/76">ANCIENT WISDOM. MODERN CARE.</p>
+            </article>
+
+            <article className="relative flex aspect-square min-h-0 w-full flex-col justify-center gap-3 rounded-[1.45rem] border border-text/10 bg-[rgb(var(--color-surface)/0.96)] p-3 text-secondary sm:p-5">
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-secondary/10 text-xl">🌱</div>
+              <h4 className="font-display text-[clamp(1.15rem,4vw,2.35rem)] leading-tight text-secondary/90">Clean Ingredients</h4>
+              <p className="text-[clamp(0.68rem,1.65vw,1rem)] leading-[1.35] tracking-[0.06em] text-secondary/72">NO COLOUR. NO PRESERVATIVES.</p>
+            </article>
+
+            <article className="relative aspect-square min-h-0 w-full overflow-hidden rounded-[1.45rem] border border-text/10 bg-surface/20">
+              <img
+                src="/Website_Assets/Product 1.jpeg"
+                alt="Golden Immunity Shot"
+                className="absolute inset-0 h-full w-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.42))]" />
+            </article>
+          </div>
+
+          <div className="pointer-events-none absolute -bottom-5 left-1/2 hidden w-[11.5rem] -translate-x-1/2 rounded-full border border-gold/30 bg-[linear-gradient(180deg,rgb(var(--color-secondary)/0.82),rgb(var(--color-primary)/0.82))] px-4 py-2.5 shadow-[0_20px_40px_rgba(0,0,0,0.25)] md:block">
+            <p className="text-center text-[0.7rem] uppercase tracking-[0.26em] text-white">Sip the Gold</p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
+          transition={{ duration: 0.72, delay: 0.06 }}
+        >
+          <div className="inline-flex items-center gap-3 text-[0.72rem] uppercase tracking-[0.42em] text-gold/78">
+            <span className="h-px w-12 bg-gold/65" />
+            Our Philosophy
+          </div>
+
+          <h3 className="mt-6 font-display text-5xl leading-[0.98] text-text/92 sm:text-6xl">
+            Luxury wellness,
+            <span className="mt-2 block italic text-gold/92">simplified.</span>
+          </h3>
+
+          <p className="mt-7 max-w-2xl text-lg leading-9 text-text/72">
+            Svarna Health unites premium Ayurvedic ingredients, refined formulation, and a modern wellness aesthetic into a calm, elevated experience.
+          </p>
+
+          <p className="mt-6 max-w-2xl text-lg leading-9 text-text/72">
+            Luxury wellness built as a ritual, not a routine. Fresh wellness shots made with ingredient integrity at the core.
+          </p>
+
+          <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            <a
+              href="#shop"
+              className="inline-flex items-center justify-center rounded-full border border-text/14 bg-secondary/72 px-8 py-3 text-lg font-semibold text-text/92 transition hover:bg-secondary/86"
+            >
+              Shop the ritual
+            </a>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -672,16 +727,12 @@ export function JourneyExperience() {
 
       <section className="relative mx-auto max-w-7xl px-6 pb-6 pt-4 sm:px-10 lg:px-12 lg:pb-10 lg:pt-6">
         <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
-          <div className="relative h-[14.5rem] sm:h-[17rem] lg:h-[20rem] overflow-hidden rounded-[1.6rem] border border-text/10 bg-secondary/35">
+          <div className="relative h-[14.5rem] sm:h-[17rem] lg:h-[20rem]">
             <img
-              src="/Website_Assets/Starting frame.png"
+              src="/Website_Assets/logo.jpg"
               alt="Svarna Health brand story artwork"
-              className="h-full w-full object-cover object-center"
+              className="h-full w-full object-contain object-center"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.06),rgba(5,5,5,0.55))]" />
-            <div className="absolute left-5 top-5 rounded-full border border-text/10 bg-void/65 px-3 py-1 text-[0.62rem] uppercase tracking-[0.34em] text-text/75 backdrop-blur-md">
-              Our Story
-            </div>
           </div>
 
           <div className="flex flex-col justify-center p-3 sm:p-4 lg:p-6">
@@ -697,10 +748,15 @@ export function JourneyExperience() {
       </section>
 
       <section id="shop" className="scroll-mt-28 relative mx-auto max-w-7xl px-6 py-20 sm:px-10 lg:px-12 lg:py-28">
-        <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
-            <p className="text-[0.72rem] uppercase tracking-[0.42em] text-text/35">Shop the ritual</p>
-            <h3 className="mt-4 font-display text-4xl leading-tight text-text/92 sm:text-5xl">Fresh wellness shots to your doorstep, crafted with care.</h3>
+        <div className="mb-12 flex flex-col items-center gap-4 text-center">
+          <div className="max-w-3xl">
+            <p className="text-[0.72rem] uppercase tracking-[0.42em] text-gold/75">Trending</p>
+            <h3 className="mt-4 font-display text-4xl leading-tight text-text/92 sm:text-5xl">
+              Signature <span className="italic text-gold/90">Bestsellers</span>
+            </h3>
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-text/66 sm:text-base">
+              Fresh wellness shots to your doorstep, crafted with care.
+            </p>
           </div>
         </div>
 
@@ -715,17 +771,44 @@ export function JourneyExperience() {
               key={product.title}
               className="group overflow-hidden rounded-[1.8rem] border border-text/10 bg-[linear-gradient(180deg,rgb(var(--color-text)/0.05),rgb(var(--color-text)/0.02))] p-3 backdrop-blur-xl"
             >
-              <div className="overflow-hidden rounded-[1.4rem] border border-text/8 bg-surface/90">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.4rem] border border-text/8 bg-surface/90">
                 <img
                   src={product.src}
                   alt={product.title}
-                  className="h-72 w-full object-cover object-center transition duration-500 group-hover:scale-[1.03]"
+                  className="absolute inset-0 h-full w-full object-cover object-center transition duration-500 group-hover:scale-[1.03]"
                 />
               </div>
               <div className="px-2 pb-2 pt-4">
-                <p className="text-[0.65rem] uppercase tracking-[0.34em] text-gold/65">Collection</p>
-                <h4 className="mt-2 font-display text-2xl text-text/92">{product.title}</h4>
+                <h4 className="font-display text-2xl text-text/92">{product.title}</h4>
               </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="w-full px-6 py-12 sm:px-10 sm:py-14 lg:px-12 lg:py-16">
+        <div className="mx-auto grid max-w-6xl gap-10 rounded-[1.8rem] border border-gold/18 bg-[linear-gradient(180deg,rgb(var(--color-secondary)/0.9),rgb(var(--color-primary)/0.9))] px-6 py-10 text-center shadow-[0_24px_70px_rgba(0,0,0,0.28)] md:grid-cols-3 md:gap-6 md:px-8">
+          {[
+            {
+              stat: '13+',
+              title: 'Whole Ingredients',
+              body: 'Carefully selected fruits, vegetables, nuts, and seeds used in their most natural, minimally processed form.'
+            },
+            {
+              stat: '0%',
+              title: 'Added Sugar & Preservatives',
+              body: 'Absolutely no refined sugar, no oil, no artificial additives, and no preservatives, just real food.'
+            },
+            {
+              stat: '100%',
+              title: 'Plant-Based Nutrition',
+              body: 'Every product is built on whole, plant-based ingredients designed to support gut health, immunity, and daily wellness.'
+            }
+          ].map((item) => (
+            <article key={item.title} className="mx-auto max-w-[19rem]">
+              <p className="font-display text-5xl leading-none text-white/95 sm:text-6xl">{item.stat}</p>
+              <h4 className="mt-4 text-[1.65rem] font-semibold leading-tight text-white/95">{item.title}</h4>
+              <p className="mt-3 text-base leading-8 text-white/76">{item.body}</p>
             </article>
           ))}
         </div>

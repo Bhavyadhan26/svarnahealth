@@ -142,7 +142,7 @@ export default function AboutPage() {
               className="relative min-h-[28rem] overflow-hidden rounded-[2rem] border border-text/10"
             >
               <img
-                src="/Website_Assets/Starting frame.png"
+                src="/Website_Assets/Product 1.jpeg"
                 alt="Svarna Health ingredients and ritual"
                 className="h-full w-full object-cover object-center"
               />
