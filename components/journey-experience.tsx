@@ -3,8 +3,8 @@
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type HTMLMotionProps } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { philosophyCards, stageCopy } from '@/lib/frame-sources';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useGLTF, Environment } from '@react-three/drei';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useGLTF, Environment, Center } from '@react-three/drei';
 import * as THREE from 'three';
 
 const ingredientTokens = ['Amla', 'Turmeric', 'Saffron', 'Herbs'];
@@ -117,18 +117,42 @@ function RailMarker({
 function OrangeModel({ scrollProgress }: { scrollProgress: any }) {
   const { scene } = useGLTF('/Website_Assets/orange/source/ORANGES.glb');
   const group = useRef<THREE.Group>(null);
+  const { viewport } = useThree();
+
+  // Make the amplitude 25% of the screen width so it never goes off-screen
+  const amplitude = viewport.width * 0.25;
   
+  // Custom path so it starts on the right, and perfectly aligns with the text sides
+  const xPath = useTransform(
+    scrollProgress,
+    [0, 0.1, 0.3, 0.5, 0.7, 0.9, 1],
+    [amplitude, amplitude, -amplitude, amplitude, -amplitude, amplitude, amplitude]
+  );
+
   useFrame(() => {
     if (group.current) {
       const progress = scrollProgress.get();
+      // Rotate for rolling effect
       group.current.rotation.y = progress * Math.PI * 4;
-      group.current.rotation.x = Math.sin(progress * Math.PI) * 0.2;
+      group.current.rotation.x = progress * Math.PI * 2;
+
+      // X follows the precise responsive path
+      group.current.position.x = xPath.get();
+
+      // Y stays perfectly centered vertically
+      group.current.position.y = 0;
     }
   });
 
+  // Responsive scale: dynamically shrinks on narrow screens so it's never cropped
+  // Max scale is 35.0 for large desktop screens
+  const responsiveScale = Math.min(35.0, viewport.width * 2.5);
+
   return (
     <group ref={group}>
-      <primitive object={scene} scale={2.5} position={[0, -1, 0]} />
+      <Center>
+        <primitive object={scene} scale={responsiveScale} position={[0, 0, 0]} />
+      </Center>
     </group>
   );
 }
@@ -137,7 +161,7 @@ useGLTF.preload('/Website_Assets/orange/source/ORANGES.glb');
 
 function OrangeModelDisplay({ scrollProgress }: FrameCanvasProps) {
   return (
-    <div className="relative h-full w-full bg-primary overflow-hidden">
+    <div className="absolute inset-0 z-0 h-full w-full overflow-hidden">
       <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
         <ambientLight intensity={1.5} />
         <directionalLight position={[5, 5, 5]} intensity={2} />
@@ -153,38 +177,39 @@ function StoryNarrative({ scrollProgress }: FrameCanvasProps) {
   const progress = useTransform(scrollProgress, [0, 1], [0, 1]);
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-40 h-full w-full bg-primary">
-      <div className="grid h-full w-full grid-rows-[0.6fr_0.4fr] gap-0 bg-primary lg:grid-cols-[0.42fr_0.58fr] lg:grid-rows-1">
-        <div className="pointer-events-auto relative order-2 overflow-hidden bg-primary p-5 sm:p-7 lg:order-1 lg:flex lg:items-center lg:justify-center">
-          {stageCopy.map((stage, index) => {
-            const stageStart = index / stageCopy.length;
-            const stageEnd = (index + 1) / stageCopy.length;
-            const opacity = useTransform(progress, [stageStart - 0.08, stageStart + 0.08, stageEnd - 0.08, stageEnd + 0.08], [0, 1, 1, 0]);
-            const y = useTransform(progress, [stageStart, stageEnd], [40, -40]);
+    <div className="pointer-events-none relative h-full w-full bg-[#fdfcf8]">
+      <OrangeModelDisplay scrollProgress={scrollProgress} />
 
-            return (
-              <motion.div
-                key={stage.label}
-                style={{ opacity, y }}
-                className="absolute inset-0 flex items-center px-5 sm:px-7 lg:px-9"
-              >
-                <div className="max-w-xl text-left">
-                  <p className="text-[0.62rem] uppercase tracking-[0.38em] text-text/65">{stage.label}</p>
-                  <h3 className="mt-3 font-display text-3xl leading-tight text-text/95 sm:text-4xl">
-                    {stage.title}
-                  </h3>
-                  <p className="mt-4 text-sm leading-7 text-text/80 sm:text-base">
-                    {stage.body}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+      <div className="pointer-events-auto absolute inset-0 z-10 mx-auto max-w-7xl">
+        {stageCopy.map((stage, index) => {
+          const stageStart = index / stageCopy.length;
+          const stageEnd = (index + 1) / stageCopy.length;
+          // Smooth fade in and out with blur
+          const opacity = useTransform(progress, [stageStart - 0.05, stageStart + 0.08, stageEnd - 0.08, stageEnd + 0.05], [0, 1, 1, 0]);
+          const y = useTransform(progress, [stageStart - 0.05, stageStart + 0.08, stageEnd - 0.08, stageEnd + 0.05], [40, 0, 0, -40]);
+          const filter = useTransform(progress, [stageStart - 0.05, stageStart + 0.08, stageEnd - 0.08, stageEnd + 0.05], ['blur(8px)', 'blur(0px)', 'blur(0px)', 'blur(8px)']);
 
-        <div className="order-1 relative min-h-[44dvh] min-h-[44svh] sm:min-h-[48dvh] sm:min-h-[48svh] lg:order-2 lg:min-h-0 pointer-events-auto">
-          <OrangeModelDisplay scrollProgress={scrollProgress} />
-        </div>
+          // Alternate left and right for text alignment
+          const isLeft = index % 2 === 0;
+
+          return (
+            <motion.div
+              key={stage.label}
+              style={{ opacity, y, filter }}
+              className={`absolute inset-y-0 flex items-center px-6 sm:px-10 lg:px-12 w-full max-w-lg lg:max-w-xl ${isLeft ? 'left-0' : 'right-0'}`}
+            >
+              <div className={`w-full ${isLeft ? 'text-left' : 'text-right'}`}>
+                <p className="text-[0.62rem] uppercase tracking-[0.38em] text-secondary/70">{stage.label}</p>
+                <h3 className="mt-3 font-display text-4xl leading-tight text-secondary sm:text-5xl drop-shadow-sm">
+                  {stage.title}
+                </h3>
+                <p className="mt-4 text-base leading-8 text-primary sm:text-lg font-medium">
+                  {stage.body}
+                </p>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
