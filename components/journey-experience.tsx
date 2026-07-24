@@ -15,9 +15,7 @@ function useFrameSources() {
   return useMemo(() => frameSources, []);
 }
 
-function ScrollIndicator({ progress }: { progress: ReturnType<typeof useScroll>['scrollYProgress'] }) {
-  const width = useTransform(progress, [0, 1], ['0%', '100%']);
-}
+
 
 function PremiumButton({
   children,
@@ -701,9 +699,7 @@ export function JourneyExperience() {
               </motion.button>
             </motion.div>
 
-            <div className="mt-16 sm:mt-20">
-              <ScrollIndicator progress={pageProgress} />
-            </div>
+
           </motion.div>
         </div>
       </section>
