@@ -26,7 +26,7 @@ const config: Config = {
         'brand-gradient': 'radial-gradient(circle at top, rgba(205,165,136,0.24), transparent 45%), radial-gradient(circle at 80% 20%, rgba(111,78,58,0.24), transparent 35%), linear-gradient(180deg, rgba(247,239,233,0.06), rgba(154,107,77,0.92) 30%, rgba(154,107,77,1))'
       },
       fontFamily: {
-        display: ['var(--font-display)', 'serif'],
+        display: ['var(--font-display)', 'sans-serif'],
         body: ['var(--font-body)', 'sans-serif']
       },
       keyframes: {

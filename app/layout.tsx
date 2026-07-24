@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, Manrope } from 'next/font/google';
+import { MuseoModerno, Open_Sans } from 'next/font/google';
 import { SiteNavbar } from '@/components/site-navbar';
 import { SiteFooter } from '@/components/site-footer';
 import './globals.css';
 
-const display = Cormorant_Garamond({
+const display = MuseoModerno({
   subsets: ['latin'],
   variable: '--font-display',
   weight: ['400', '500', '600', '700']
 });
 
-const body = Manrope({
+const body = Open_Sans({
   subsets: ['latin'],
   variable: '--font-body',
   weight: ['400', '500', '600', '700']

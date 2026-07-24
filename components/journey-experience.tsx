@@ -17,15 +17,6 @@ function useFrameSources() {
 
 function ScrollIndicator({ progress }: { progress: ReturnType<typeof useScroll>['scrollYProgress'] }) {
   const width = useTransform(progress, [0, 1], ['0%', '100%']);
-
-  return (
-    <div className="mt-12 flex flex-col items-center gap-4 text-center">
-      <span className="text-[0.7rem] uppercase tracking-[0.45em] text-text/35">Scroll to Begin Ritual</span>
-      <div className="h-px w-44 overflow-hidden bg-text/10">
-        <motion.div className="h-full bg-gradient-to-r from-transparent via-gold to-transparent" style={{ width }} />
-      </div>
-    </div>
-  );
 }
 
 function PremiumButton({
@@ -604,8 +595,6 @@ export function JourneyExperience() {
   const journeyContainerRef = useRef<HTMLDivElement | null>(null);
   const joinedResetTimerRef = useRef<number | null>(null);
   const { scrollYProgress: pageProgress } = useScroll();
-  const [heroDisplayText, setHeroDisplayText] = useState('');
-  const [heroDeleting, setHeroDeleting] = useState(false);
   const [contactEmail, setContactEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [joined, setJoined] = useState(false);
@@ -617,35 +606,7 @@ export function JourneyExperience() {
   const heroY = useTransform(pageProgress, [0, 0.15], [0, -40]);
   const heroOpacity = useTransform(pageProgress, [0, 0.08, 0.18], [1, 1, 0]);
 
-  useEffect(() => {
-    let delay = heroDeleting ? 45 : 85;
-    if (!heroDeleting && heroDisplayText === homeHeroPhrase) {
-      delay = 1300;
-    }
-    if (heroDeleting && heroDisplayText.length === 0) {
-      delay = 320;
-    }
 
-    const timer = window.setTimeout(() => {
-      if (!heroDeleting) {
-        if (heroDisplayText === homeHeroPhrase) {
-          setHeroDeleting(true);
-          return;
-        }
-        setHeroDisplayText(homeHeroPhrase.slice(0, heroDisplayText.length + 1));
-        return;
-      }
-
-      if (heroDisplayText.length === 0) {
-        setHeroDeleting(false);
-        return;
-      }
-
-      setHeroDisplayText(homeHeroPhrase.slice(0, heroDisplayText.length - 1));
-    }, delay);
-
-    return () => window.clearTimeout(timer);
-  }, [heroDeleting, heroDisplayText]);
 
   useEffect(() => {
     return () => {
@@ -681,34 +642,64 @@ export function JourneyExperience() {
 
   return (
     <main className="grain bg-void text-white">
-      <section id="home" className="relative flex h-[100dvh] min-h-[100svh] w-full items-center justify-center overflow-hidden scroll-mt-28">
-        <div className="flex h-full w-full items-center justify-center px-6 sm:px-10 lg:px-12">
+      <section id="home" className="relative flex h-[100vh] min-h-[100vh] max-h-[100vh] w-full items-center justify-center overflow-hidden scroll-mt-28">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+        >
+          <source src="/Website_Assets/HERO_SECTION_VIDEO.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 z-0 bg-black/40" />
+        <div className="relative z-10 flex h-full w-full items-center justify-center px-6 pt-[68px] sm:px-10 lg:px-12">
           <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 w-full max-w-4xl text-center">
-            <p className="mb-8 text-sm uppercase tracking-[0.3em] text-gold/80 sm:mb-10 sm:text-base">Svarna</p>
-            <h1
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.2, delay: 0.1, ease: 'easeOut' }}
+              className="mb-2 text-sm uppercase tracking-[0.3em] text-white sm:mb-5 sm:text-base"
+            >
+              Svarna
+            </motion.p>
+            <motion.h1
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
               className="font-display text-[clamp(2.2rem,12vw,4.75rem)] leading-[1.05] text-text/95 sm:text-6xl md:text-7xl lg:text-8xl"
               aria-label="SIP THE GOLD"
             >
               <span className="inline-block whitespace-nowrap">
-                <span>{heroDisplayText}</span>
-                <span aria-hidden="true" className="about-type-cursor" />
+                <span>{homeHeroPhrase}</span>
               </span>
-            </h1>
-            <p className="mx-auto mt-8 max-w-2xl text-sm leading-7 text-text/70 sm:mt-10 sm:text-base md:text-lg md:leading-8">
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.2, delay: 0.5, ease: 'easeOut' }}
+              className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-text/70 sm:mt-6 sm:text-base md:text-lg md:leading-8"
+            >
               Small daily habits. Big long term results.
-            </p>
-            <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:mt-14 sm:flex-row">
-              <PremiumButton
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.2, delay: 0.7, ease: 'easeOut' }}
+              className="mt-6 flex flex-col items-center justify-center sm:mt-8"
+            >
+              <motion.button
+                suppressHydrationWarning
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => {
                   journeyContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
+                className="inline-flex items-center justify-center rounded-full border border-white bg-transparent px-8 py-3.5 text-sm font-semibold tracking-[0.22em] text-white transition-colors hover:bg-white/10"
               >
                 Start Your Ritual
-              </PremiumButton>
-              <span className="rounded-full border border-text/10 bg-text/5 px-5 py-3 text-xs text-text/60 backdrop-blur-sm sm:text-sm">
-                Beauty from within, reimagined.
-              </span>
-            </div>
+              </motion.button>
+            </motion.div>
 
             <div className="mt-16 sm:mt-20">
               <ScrollIndicator progress={pageProgress} />
@@ -736,7 +727,7 @@ export function JourneyExperience() {
         <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
           <div className="relative h-[14.5rem] sm:h-[17rem] lg:h-[20rem]">
             <img
-              src="/Website_Assets/logo.jpg"
+              src="/Website_Assets/white logo.svg"
               alt="Svarna Health brand story artwork"
               className="h-full w-full object-contain object-center"
             />

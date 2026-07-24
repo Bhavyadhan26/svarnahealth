@@ -47,24 +47,18 @@ export function SiteNavbar() {
   return (
     <header
       ref={navbarRef}
-      className="sticky top-0 z-50 w-full bg-[linear-gradient(180deg,rgb(var(--color-primary)/0.96),rgb(var(--color-primary)/0.86))] backdrop-blur-xl"
+      className="fixed top-0 z-50 w-full bg-transparent"
     >
       <div className="flex w-full items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/#home" className="flex min-w-0 items-center gap-3 rounded-none px-0 py-1 transition" aria-label="Svarna home">
-          <span className="shrink-0">
-            <Image
-              src="/Website_Assets/logo.jpg"
-              alt="Svarna logo"
-              width={88}
-              height={44}
-              className="h-11 w-auto"
-              priority
-            />
-          </span>
-          <span className="flex min-w-0 flex-col leading-none">
-            <span className="font-display text-lg tracking-[0.1em] text-text/92 sm:text-xl">Svarna</span>
-            <span className="mt-1 text-[0.62rem] uppercase tracking-[0.28em] text-text/55">Nurturing Immunity, Crafted Naturally</span>
-          </span>
+        <Link href="/#home" className="flex items-center transition" aria-label="Svarna home">
+          <Image
+            src="/Website_Assets/white logo.svg"
+            alt="Svarna Logo"
+            width={88}
+            height={44}
+            className="h-11 w-auto object-contain"
+            priority
+          />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
@@ -80,6 +74,7 @@ export function SiteNavbar() {
         </nav>
 
         <button
+          suppressHydrationWarning
           type="button"
           className="inline-flex items-center justify-center rounded-full border border-text/10 bg-text/5 px-4 py-2 text-[0.7rem] uppercase tracking-[0.26em] text-text/78 transition hover:bg-text/10 lg:hidden"
           onClick={() => setIsOpen((current) => !current)}
