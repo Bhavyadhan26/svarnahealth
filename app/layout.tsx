@@ -6,6 +6,7 @@ import '@fontsource/open-sauce-sans/600.css';
 import '@fontsource/open-sauce-sans/700.css';
 import { SiteNavbar } from '@/components/site-navbar';
 import { SiteFooter } from '@/components/site-footer';
+import { GlobalLoader } from '@/components/global-loader';
 import './globals.css';
 
 const display = MuseoModerno({
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body className={`${display.variable} bg-void font-body text-white antialiased`}>
+        <GlobalLoader />
         <SiteNavbar />
         {children}
         <SiteFooter />
