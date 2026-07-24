@@ -2,7 +2,10 @@
 
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type HTMLMotionProps } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { frameSources, philosophyCards, stageCopy } from '@/lib/frame-sources';
+import { philosophyCards, stageCopy } from '@/lib/frame-sources';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useGLTF, Environment } from '@react-three/drei';
+import * as THREE from 'three';
 
 const ingredientTokens = ['Amla', 'Turmeric', 'Saffron', 'Herbs'];
 const homeHeroPhrase = 'SIP THE GOLD';
@@ -11,9 +14,7 @@ type FrameCanvasProps = {
   scrollProgress: ReturnType<typeof useScroll>['scrollYProgress'];
 };
 
-function useFrameSources() {
-  return useMemo(() => frameSources, []);
-}
+
 
 
 
@@ -113,125 +114,37 @@ function RailMarker({
   );
 }
 
-function ScrollFrameDisplay({ scrollProgress }: FrameCanvasProps) {
-  const allFrames = useFrameSources();
-  const sourceList = useMemo(() => {
-    if (typeof navigator === 'undefined') {
-      return allFrames;
+function OrangeModel({ scrollProgress }: { scrollProgress: any }) {
+  const { scene } = useGLTF('/Website_Assets/orange/source/ORANGES.glb');
+  const group = useRef<THREE.Group>(null);
+  
+  useFrame(() => {
+    if (group.current) {
+      const progress = scrollProgress.get();
+      group.current.rotation.y = progress * Math.PI * 4;
+      group.current.rotation.x = Math.sin(progress * Math.PI) * 0.2;
     }
-
-    const nav = navigator as Navigator & { deviceMemory?: number };
-    const memory = nav.deviceMemory ?? 4;
-    const cores = nav.hardwareConcurrency ?? 4;
-
-    let step = 1;
-    if (cores <= 8 || memory <= 8) {
-      step = 2;
-    }
-    if (cores <= 4 || memory <= 4) {
-      step = 3;
-    }
-    if (cores <= 2 || memory <= 2) {
-      step = 4;
-    }
-
-    const reduced = allFrames.filter((_, index) => index % step === 0);
-    const lastFrame = allFrames[allFrames.length - 1];
-
-    if (reduced[reduced.length - 1] !== lastFrame) {
-      reduced.push(lastFrame);
-    }
-
-    return reduced;
-  }, [allFrames]);
-  const frameRef = useRef(0);
-  const lastRenderedFrameRef = useRef(-1);
-  const targetFrameRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
-  const preloadedRef = useRef<Set<number>>(new Set());
-  const prefersReducedMotion = useReducedMotion();
-  const [visibleFrameIndex, setVisibleFrameIndex] = useState(0);
-  const [isReady, setIsReady] = useState(false);
-
-  const preloadAround = useCallback((center: number) => {
-    const start = Math.max(0, center - 4);
-    const end = Math.min(sourceList.length - 1, center + 12);
-
-    for (let index = start; index <= end; index += 1) {
-      if (preloadedRef.current.has(index)) {
-        continue;
-      }
-
-      preloadedRef.current.add(index);
-      const image = new Image();
-      image.decoding = 'async';
-      image.src = sourceList[index];
-    }
-  }, [sourceList]);
-
-  useEffect(() => {
-    const firstImage = new Image();
-    firstImage.decoding = 'async';
-    firstImage.onload = () => setIsReady(true);
-    firstImage.src = sourceList[0];
-
-    preloadAround(0);
-
-    return () => {
-      if (rafRef.current) {
-        window.cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [preloadAround, sourceList]);
-
-  useMotionValueEvent(scrollProgress, 'change', (latest) => {
-    const maxFrame = sourceList.length - 1;
-    targetFrameRef.current = latest * maxFrame;
-
-    if (rafRef.current !== null) {
-      return;
-    }
-
-    const animateToTarget = () => {
-      const smoothing = prefersReducedMotion ? 0.26 : 0.18;
-      frameRef.current += (targetFrameRef.current - frameRef.current) * smoothing;
-
-      const nextFrame = Math.max(0, Math.min(maxFrame, Math.round(frameRef.current)));
-      if (nextFrame !== lastRenderedFrameRef.current) {
-        lastRenderedFrameRef.current = nextFrame;
-        setVisibleFrameIndex(nextFrame);
-        preloadAround(nextFrame);
-      }
-
-      if (Math.abs(targetFrameRef.current - frameRef.current) > 0.08) {
-        rafRef.current = window.requestAnimationFrame(animateToTarget);
-      } else {
-        rafRef.current = null;
-      }
-    };
-
-    rafRef.current = window.requestAnimationFrame(animateToTarget);
   });
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-primary">
-      <div className="mx-auto flex h-full w-full items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
-        <div className="relative flex h-full w-full max-w-[46rem] items-center justify-center">
-          {isReady && sourceList[visibleFrameIndex] && (
-            <img
-              src={sourceList[visibleFrameIndex]}
-              alt={`Frame ${visibleFrameIndex + 1}`}
-              className="max-h-full max-w-full object-contain object-center"
-              style={{ opacity: visibleFrameIndex > 0 ? 1 : 0.8 }}
-            />
-          )}
-          {!isReady && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <p className="text-text/55 text-sm">Loading frames...</p>
-            </div>
-          )}
-        </div>
-      </div>
+    <group ref={group}>
+      <primitive object={scene} scale={2.5} position={[0, -1, 0]} />
+    </group>
+  );
+}
+
+useGLTF.preload('/Website_Assets/orange/source/ORANGES.glb');
+
+function OrangeModelDisplay({ scrollProgress }: FrameCanvasProps) {
+  return (
+    <div className="relative h-full w-full bg-primary overflow-hidden">
+      <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
+        <ambientLight intensity={1.5} />
+        <directionalLight position={[5, 5, 5]} intensity={2} />
+        <directionalLight position={[-5, 5, -5]} intensity={1} />
+        <Environment preset="studio" />
+        <OrangeModel scrollProgress={scrollProgress} />
+      </Canvas>
     </div>
   );
 }
@@ -269,234 +182,8 @@ function StoryNarrative({ scrollProgress }: FrameCanvasProps) {
           })}
         </div>
 
-        <div className="order-1 relative min-h-[44dvh] min-h-[44svh] sm:min-h-[48dvh] sm:min-h-[48svh] lg:order-2 lg:min-h-0">
-          <ScrollFrameDisplay scrollProgress={scrollProgress} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FrameCanvas({ scrollProgress }: FrameCanvasProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const frameRef = useRef(0);
-  const targetFrameRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
-  const sourceList = useFrameSources();
-  const prefersReducedMotion = useReducedMotion();
-  const [isReady, setIsReady] = useState(false);
-  const [loadFailed, setLoadFailed] = useState(false);
-  const [viewportScale, setViewportScale] = useState(1);
-  const [frameLoadProgress, setFrameLoadProgress] = useState(0);
-  const [visibleFrameIndex, setVisibleFrameIndex] = useState(0);
-
-  const renderFrame = useCallback(() => {
-    const canvas = canvasRef.current;
-    const wrapper = wrapperRef.current;
-    if (!canvas || !wrapper) {
-      return;
-    }
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      return;
-    }
-
-    const rect = wrapper.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const width = Math.max(1, Math.floor(rect.width * dpr));
-    const height = Math.max(1, Math.floor(rect.height * dpr));
-
-    if (canvas.width !== width || canvas.height !== height) {
-      canvas.width = width;
-      canvas.height = height;
-    }
-
-    const progress = targetFrameRef.current / Math.max(1, sourceList.length - 1);
-    const easedFrame = Math.max(0, Math.min(sourceList.length - 1, Math.round(frameRef.current)));
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = Math.min(canvas.width, canvas.height) * 0.34;
-    const glowStrength = Math.min(1, progress * 1.35 + viewportScale * 0.12);
-
-    const aura = ctx.createRadialGradient(centerX, centerY, radius * 0.2, centerX, centerY, radius * 1.35);
-    aura.addColorStop(0, `rgba(205, 165, 136, ${0.16 + glowStrength * 0.2})`);
-    aura.addColorStop(0.45, `rgba(111, 78, 58, ${0.08 + progress * 0.08})`);
-    aura.addColorStop(1, 'rgba(154, 107, 77, 0)');
-    ctx.fillStyle = aura;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const particleCount = 24;
-    for (let index = 0; index < particleCount; index += 1) {
-      const ratio = (index + 1) / particleCount;
-      const angle = ratio * Math.PI * 2 + progress * Math.PI * 1.5;
-      const orbit = radius * (0.45 + ratio * 0.45);
-      const x = centerX + Math.cos(angle) * orbit * 0.55;
-      const y = centerY + Math.sin(angle * 1.2) * orbit * 0.28;
-      const size = Math.max(1.2, radius * (0.006 + ratio * 0.01));
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(205,165,136,${0.08 + ratio * 0.22})`;
-      ctx.arc(x, y, size, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    const shimmer = ctx.createLinearGradient(0, centerY - radius, canvas.width, centerY + radius);
-    shimmer.addColorStop(0, 'rgba(255,255,255,0)');
-    shimmer.addColorStop(0.5, `rgba(205,165,136,${0.1 + progress * 0.16})`);
-    shimmer.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = shimmer;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }, [sourceList.length, viewportScale]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) {
-      return;
-    }
-
-    if (!canvas.getContext('2d')) {
-      return;
-    }
-
-    let cancelled = false;
-
-    const loadImage = (src: string) =>
-      new Promise<HTMLImageElement | null>((resolve) => {
-        const image = new Image();
-        image.onload = () => resolve(image);
-        image.onerror = () => resolve(null);
-        image.src = src;
-      });
-
-    const loadImages = async () => {
-      let successfulLoads = 0;
-
-      for (let index = 0; index < sourceList.length; index += 1) {
-        const image = await loadImage(sourceList[index]);
-
-        if (cancelled) {
-          return;
-        }
-
-        if (image) {
-          successfulLoads += 1;
-        }
-
-        setFrameLoadProgress((index + 1) / sourceList.length);
-      }
-
-      if (!cancelled) {
-        setIsReady(successfulLoads > 0);
-        setLoadFailed(successfulLoads === 0);
-      }
-    };
-
-    void loadImages();
-
-    const resize = () => {
-      const wrapper = wrapperRef.current;
-      if (!wrapper) {
-        return;
-      }
-
-      const rect = wrapper.getBoundingClientRect();
-      setViewportScale(Math.min(1.15, Math.max(0.7, rect.width / 1440)));
-      canvas.width = Math.max(1, Math.floor(rect.width * Math.min(window.devicePixelRatio || 1, 2)));
-      canvas.height = Math.max(1, Math.floor(rect.height * Math.min(window.devicePixelRatio || 1, 2)));
-      renderFrame();
-    };
-
-    resize();
-    window.addEventListener('resize', resize);
-
-    const animate = () => {
-      const progress = scrollProgress.get();
-      const maxFrame = sourceList.length - 1;
-      targetFrameRef.current = progress * maxFrame;
-      frameRef.current += (targetFrameRef.current - frameRef.current) * (prefersReducedMotion ? 0.18 : 0.08);
-      setVisibleFrameIndex(Math.max(0, Math.min(maxFrame, Math.round(frameRef.current))));
-
-      renderFrame();
-      rafRef.current = window.requestAnimationFrame(animate);
-    };
-
-    rafRef.current = window.requestAnimationFrame(animate);
-
-    return () => {
-      cancelled = true;
-      window.removeEventListener('resize', resize);
-      if (rafRef.current !== null) {
-        window.cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [prefersReducedMotion, renderFrame, scrollProgress, sourceList]);
-
-  useMotionValueEvent(scrollProgress, 'change', (latest) => {
-    targetFrameRef.current = latest * (sourceList.length - 1);
-  });
-
-  const status = Math.round(frameLoadProgress * 100);
-
-  return (
-    <div ref={wrapperRef} className="relative h-[100dvh] min-h-[100svh] overflow-hidden rounded-[2rem] border border-text/8 bg-surface shadow-[0_0_0_1px_rgb(var(--color-text)/0.04),0_40px_120px_rgba(111,78,58,0.45)]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(205,165,136,0.22),transparent_24%),radial-gradient(circle_at_50%_55%,rgba(111,78,58,0.14),transparent_30%),linear-gradient(180deg,rgba(247,239,233,0.96),rgba(237,225,215,0.92))]" />
-
-      <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8">
-        <div className="relative z-20 flex h-full w-full max-w-5xl items-center justify-center overflow-hidden rounded-[2rem] border border-secondary/20 bg-[linear-gradient(180deg,rgba(247,239,233,0.98),rgba(247,239,233,0.82))] p-3 shadow-[0_30px_120px_rgba(111,78,58,0.24)] backdrop-blur-sm">
-          <img
-            src={sourceList[visibleFrameIndex]}
-            alt="Svarna Health frame sequence"
-            className="h-full w-full rounded-[1.5rem] object-contain object-center bg-[#f7efe9]"
-            decoding="async"
-            loading="eager"
-          />
-          <div className="pointer-events-none absolute inset-0 rounded-[1.5rem] ring-1 ring-inset ring-secondary/15" />
-          <div className="pointer-events-none absolute left-4 top-4 rounded-full border border-secondary/15 bg-surface/82 px-3 py-1 text-[0.65rem] uppercase tracking-[0.32em] text-secondary/75 backdrop-blur-md">
-            Frame {String(visibleFrameIndex + 1).padStart(3, '0')} / {String(sourceList.length).padStart(3, '0')}
-          </div>
-          <div className="pointer-events-none absolute right-4 top-4 max-w-[16rem] rounded-[1rem] border border-gold/25 bg-surface/86 px-4 py-3 text-left shadow-[0_10px_30px_rgb(var(--color-secondary)/0.22)] backdrop-blur-md">
-            <p className="text-[0.62rem] uppercase tracking-[0.34em] text-gold">Live render</p>
-            <p className="mt-1 text-sm text-secondary/75">{isReady ? 'Frame sequence is active' : loadFailed ? 'Frame sequence failed to load' : 'Loading frames'}</p>
-          </div>
-        </div>
-      </div>
-
-      <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 z-10 h-full w-full mix-blend-screen opacity-90" aria-hidden="true" />
-
-      <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(205,165,136,0.06),transparent_35%),linear-gradient(180deg,rgba(154,107,77,0.02),rgba(111,78,58,0.08))]" />
-
-      <div className="absolute left-6 top-6 z-30 flex flex-col gap-2 text-[0.66rem] uppercase tracking-[0.38em] text-secondary/45 sm:left-8 sm:top-8">
-        <span>Scroll Narrative</span>
-        <span className="text-gold">{isReady ? 'Sequence ready' : loadFailed ? 'Sequence load failed' : `Preloading ${status}%`}</span>
-      </div>
-
-      <div className="absolute inset-x-0 bottom-0 z-30 grid gap-4 p-6 sm:p-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-        <motion.div
-          className="max-w-2xl"
-          style={{
-            y: useTransform(scrollProgress, [0, 1], [0, -56]),
-            opacity: useTransform(scrollProgress, [0, 0.1, 0.92, 1], [0, 1, 1, 0])
-          }}
-        >
-          <p className="mb-3 text-[0.7rem] uppercase tracking-[0.42em] text-secondary/45">{stageCopy[0].label} to {stageCopy[4].label}</p>
-          <h2 className="font-display text-4xl leading-none text-secondary/90 sm:text-5xl lg:text-7xl">The Journey of Inner Glow</h2>
-          <p className="mt-4 max-w-xl text-sm leading-7 text-secondary/70 sm:text-base">
-            From raw botanicals to a golden elixir, the ritual evolves through purity, extraction, and luminous nourishment.
-          </p>
-        </motion.div>
-
-        <div className="grid gap-3 text-sm text-secondary/65 sm:max-w-sm lg:justify-self-end">
-          <div className="rounded-[1.5rem] border border-secondary/15 bg-surface/78 p-4 backdrop-blur-xl">
-            <p className="text-[0.66rem] uppercase tracking-[0.34em] text-secondary/55">Stage cue</p>
-            <p className="mt-2 text-base text-secondary/85">{stageCopy[Math.min(4, Math.max(0, Math.round(targetFrameRef.current / 60)))]?.title}</p>
-            <p className="mt-2 leading-6 text-secondary/65">
-              {stageCopy[Math.min(4, Math.max(0, Math.round(targetFrameRef.current / 60)))]?.body}
-            </p>
-          </div>
+        <div className="order-1 relative min-h-[44dvh] min-h-[44svh] sm:min-h-[48dvh] sm:min-h-[48svh] lg:order-2 lg:min-h-0 pointer-events-auto">
+          <OrangeModelDisplay scrollProgress={scrollProgress} />
         </div>
       </div>
     </div>
@@ -646,9 +333,10 @@ export function JourneyExperience() {
           loop
           muted
           playsInline
+          preload="auto"
           className="absolute inset-0 z-0 h-full w-full object-cover"
         >
-          <source src="/Website_Assets/HERO_SECTION_VIDEO.mp4" type="video/mp4" />
+          <source src="https://res.cloudinary.com/dxcsktcxk/video/upload/q_auto,f_auto/v1784882321/HERO_SECTION_VIDEO_jm5dki.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 z-0 bg-black/40" />
         <div className="relative z-10 flex h-full w-full items-center justify-center px-6 pt-[68px] sm:px-10 lg:px-12">
