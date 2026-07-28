@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type HTMLMotionProps } from 'framer-motion';
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform, type HTMLMotionProps } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { philosophyCards, stageCopy } from '@/lib/frame-sources';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
@@ -166,7 +166,6 @@ function OrangeModelDisplay({ scrollProgress }: FrameCanvasProps) {
         <ambientLight intensity={1.5} />
         <directionalLight position={[5, 5, 5]} intensity={2} />
         <directionalLight position={[-5, 5, -5]} intensity={1} />
-        <Environment preset="studio" />
         <OrangeModel scrollProgress={scrollProgress} />
       </Canvas>
     </div>
@@ -177,17 +176,16 @@ function StoryNarrative({ scrollProgress }: FrameCanvasProps) {
   const progress = useTransform(scrollProgress, [0, 1], [0, 1]);
 
   return (
-    <div className="pointer-events-none relative h-full w-full bg-[#fdfcf8]">
+    <div className="pointer-events-none relative h-full w-full bg-white">
       <OrangeModelDisplay scrollProgress={scrollProgress} />
 
       <div className="pointer-events-auto absolute inset-0 z-10 mx-auto max-w-7xl">
         {stageCopy.map((stage, index) => {
           const stageStart = index / stageCopy.length;
           const stageEnd = (index + 1) / stageCopy.length;
-          // Smooth fade in and out with blur
+          // Smooth fade in and out
           const opacity = useTransform(progress, [stageStart - 0.05, stageStart + 0.08, stageEnd - 0.08, stageEnd + 0.05], [0, 1, 1, 0]);
           const y = useTransform(progress, [stageStart - 0.05, stageStart + 0.08, stageEnd - 0.08, stageEnd + 0.05], [40, 0, 0, -40]);
-          const filter = useTransform(progress, [stageStart - 0.05, stageStart + 0.08, stageEnd - 0.08, stageEnd + 0.05], ['blur(8px)', 'blur(0px)', 'blur(0px)', 'blur(8px)']);
 
           // Alternate left and right for text alignment
           const isLeft = index % 2 === 0;
@@ -195,7 +193,7 @@ function StoryNarrative({ scrollProgress }: FrameCanvasProps) {
           return (
             <motion.div
               key={stage.label}
-              style={{ opacity, y, filter }}
+              style={{ opacity, y }}
               className={`absolute inset-y-0 flex items-center px-6 sm:px-10 lg:px-12 w-full max-w-lg lg:max-w-xl ${isLeft ? 'left-0' : 'right-0'}`}
             >
               <div className={`w-full ${isLeft ? 'text-left' : 'text-right'}`}>
@@ -303,14 +301,16 @@ function PhilosophySection() {
 
 export function JourneyExperience() {
   const journeyContainerRef = useRef<HTMLDivElement | null>(null);
-  const joinedResetTimerRef = useRef<number | null>(null);
   const { scrollYProgress: pageProgress } = useScroll();
-  const [contactEmail, setContactEmail] = useState('');
-  const [emailError, setEmailError] = useState(false);
-  const [joined, setJoined] = useState(false);
   const { scrollYProgress } = useScroll({
     target: journeyContainerRef,
     offset: ['start start', 'end end']
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
   });
 
   const heroY = useTransform(pageProgress, [0, 0.15], [0, -40]);
@@ -318,37 +318,7 @@ export function JourneyExperience() {
 
 
 
-  useEffect(() => {
-    return () => {
-      if (joinedResetTimerRef.current !== null) {
-        window.clearTimeout(joinedResetTimerRef.current);
-      }
-    };
-  }, []);
 
-  const isValidEmail = useCallback((value: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-  }, []);
-
-  const handleJoinList = useCallback(() => {
-    if (!isValidEmail(contactEmail)) {
-      setEmailError(true);
-      return;
-    }
-
-    setEmailError(false);
-    setContactEmail('');
-    setJoined(true);
-
-    if (joinedResetTimerRef.current !== null) {
-      window.clearTimeout(joinedResetTimerRef.current);
-    }
-
-    joinedResetTimerRef.current = window.setTimeout(() => {
-      setJoined(false);
-      joinedResetTimerRef.current = null;
-    }, 5000);
-  }, [contactEmail, isValidEmail]);
 
   return (
     <main className="grain bg-void text-white">
@@ -361,7 +331,7 @@ export function JourneyExperience() {
           preload="auto"
           className="absolute inset-0 z-0 h-full w-full object-cover"
         >
-          <source src="https://res.cloudinary.com/dxcsktcxk/video/upload/q_auto,f_auto/v1784882321/HERO_SECTION_VIDEO_jm5dki.mp4" type="video/mp4" />
+          <source src="https://res.cloudinary.com/dxcsktcxk/video/upload/v1784882321/HERO_SECTION_VIDEO_jm5dki.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 z-0 bg-black/40" />
         <div className="relative z-10 flex h-full w-full items-center justify-center px-6 pt-[68px] sm:px-10 lg:px-12">
@@ -420,11 +390,11 @@ export function JourneyExperience() {
       <section
         id="journey"
         ref={journeyContainerRef}
-        className="min-h-[300dvh] min-h-[300svh] w-full pb-8 scroll-mt-28 sm:pb-10"
+        className="min-h-[600dvh] min-h-[600svh] w-full pb-8 scroll-mt-28 sm:pb-10"
         style={{ position: 'relative' }}
       >
         <div className="sticky top-0 flex h-[100dvh] min-h-[100svh] items-center">
-          <StoryNarrative scrollProgress={scrollYProgress} />
+          <StoryNarrative scrollProgress={smoothProgress} />
         </div>
       </section>
 
@@ -521,68 +491,7 @@ export function JourneyExperience() {
         </div>
       </section>
 
-      <section id="contact" className="scroll-mt-28 relative mx-auto max-w-6xl px-6 pb-24 pt-10 sm:px-10 lg:px-12 lg:pb-32">
-        <div className="rounded-[2rem] border border-text/10 bg-[radial-gradient(circle_at_top,rgba(205,165,136,0.16),transparent_30%),linear-gradient(180deg,rgb(var(--color-text)/0.05),rgb(var(--color-text)/0.02))] p-8 shadow-aura sm:p-12">
-          <p className="text-[0.68rem] uppercase tracking-[0.42em] text-text/35">Contact & subscribe</p>
-          <div className="mt-4 grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
-            <div>
-              <h3 className="font-display text-4xl leading-tight text-text/92 sm:text-5xl">Start Your Ritual</h3>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-text/60 sm:text-base">
-                Join a considered wellness experience built around consistency, beauty, and functional nourishment.
-              </p>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="mailto:svarnahealth@gmail.com"
-                  className="rounded-full border border-text/10 bg-text/5 px-5 py-3 text-sm font-semibold text-text/82 transition hover:border-gold/30 hover:bg-gold/10"
-                >
-                  svarnahealth@gmail.com
-                </a>
-                <a
-                  href="tel:+918961256620"
-                  className="rounded-full border border-text/10 bg-text/5 px-5 py-3 text-sm font-semibold text-text/82 transition hover:border-gold/30 hover:bg-gold/10"
-                >
-                  Call us
-                </a>
-              </div>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:justify-self-end">
-              <input
-                suppressHydrationWarning
-                aria-label="Email address"
-                type="email"
-                placeholder="Email address"
-                value={contactEmail}
-                onChange={(event) => {
-                  const nextEmail = event.target.value;
-                  setContactEmail(nextEmail);
-                  if (emailError) {
-                    setEmailError(!isValidEmail(nextEmail));
-                  }
-                }}
-                className={`min-w-0 rounded-full border bg-secondary/50 px-5 py-3 text-sm text-text/90 outline-none transition placeholder:text-text/30 focus:border-gold/50 ${emailError ? 'border-red-400/70' : 'border-text/10'}`}
-              />
-              <PremiumButton onClick={handleJoinList} aria-live="polite">
-                <span className="relative inline-flex min-w-[8.8rem] justify-center overflow-hidden">
-                  <AnimatePresence mode="wait" initial={false}>
-                    <motion.span
-                      key={joined ? 'joined' : 'join'}
-                      initial={{ opacity: 0, y: 8, filter: 'blur(2px)' }}
-                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                      exit={{ opacity: 0, y: -8, filter: 'blur(1px)' }}
-                      transition={{ duration: 0.28, ease: 'easeOut' }}
-                    >
-                      {joined ? 'Joined😉' : 'Join the List'}
-                    </motion.span>
-                  </AnimatePresence>
-                </span>
-              </PremiumButton>
-            </div>
-            {emailError && (
-              <p className="lg:col-start-2 lg:justify-self-end px-3 text-xs text-red-300">Please enter a valid email address.</p>
-            )}
-          </div>
-        </div>
-      </section>
+
     </main>
   );
 }

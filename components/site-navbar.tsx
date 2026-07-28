@@ -59,9 +59,9 @@ export function SiteNavbar() {
   return (
     <header
       ref={navbarRef}
-      className={`fixed top-0 z-50 w-full transition-all duration-500 ease-in-out ${isScrolled ? 'bg-white/70 backdrop-blur-lg shadow-[0_4px_30px_rgba(0,0,0,0.03)]' : 'bg-transparent'}`}
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-in-out ${isScrolled ? 'bg-surface/90 backdrop-blur-lg shadow-[0_4px_30px_rgba(0,0,0,0.03)]' : 'bg-transparent'}`}
     >
-      <div className="flex w-full items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/#home" className="flex items-center transition" aria-label="Svarna home">
           <Image
             src={isScrolled ? '/Website_Assets/black logo.svg' : '/Website_Assets/white logo.svg'}
